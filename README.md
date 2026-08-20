@@ -75,10 +75,10 @@ SmartAttend is structured into four cohesive development modules:
 | **4** | **Appeals, Notifications & Agentic AI** | Full-stack vertical slice: student appeal CRUD, FCM/Twilio notifications, predictive defaulter alerts, and Claude/OpenAI Agentic AI "What If?" planner integration. | Full-Stack & Agentic AI |
 
 ### Team Members — Team Vision
-- **Ahir Om**
+- **Tisha Amit**
 - **Nidhi Tak**
 - **Priyanshi Vasa**
-- **Tisha Amit**
+- **Ahir Om**
 
 *Department of Computer Science & Engineering, Karnavati University (2026)*
 
