@@ -1,6 +1,5 @@
 # SmartAttend — AI-Enabled Face Recognition Attendance and Academic Monitoring System
 
-[![Phase](https://img.shields.io/badge/Phase-I%20Completed-brightgreen?style=for-the-badge&logo=github)](docs/SmartAttend_SRS.docx)
 [![Team](https://img.shields.io/badge/Team-Vision-blueviolet?style=for-the-badge)](https://github.com/ommahir7447/Team-Vision)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/Backend-Flask-000000?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com/)
@@ -160,62 +159,14 @@ The system models six key entities stored in the cloud database:
 
 ---
 
-## Quick Start and Local Setup
+## Repository Initialization
 
-### Prerequisites
-- **Python 3.10+** installed
-- **Git** installed
-- ESP32-CAM module or USB Webcam connected to your local environment
-- Firebase Service Account Key or AWS Credentials
-- Claude API key (Anthropic) or OpenAI API key
+To clone and initialize the repository:
 
-### 1. Clone the Repository
 ```bash
 git clone https://github.com/ommahir7447/Team-Vision.git
 cd Team-Vision
 ```
-
-### 2. Create & Activate Virtual Environment
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# macOS / Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure Environment Variables
-Create a `.env` file in the root directory based on `.env.example`:
-```env
-FLASK_APP=backend/app.py
-FLASK_ENV=development
-SECRET_KEY=your_super_secret_jwt_key
-
-# Database Config
-FIREBASE_CREDENTIALS_PATH=config/firebase_credentials.json
-
-# LLM Agent Config (Module 4)
-ANTHROPIC_API_KEY=your_claude_api_key
-# OPENAI_API_KEY=your_openai_api_key
-
-# Notifications Config
-FCM_SERVER_KEY=your_fcm_server_key
-TWILIO_ACCOUNT_SID=your_twilio_sid
-TWILIO_AUTH_TOKEN=your_twilio_token
-```
-
-### 5. Run the Backend Server
-```bash
-flask run --host=0.0.0.0 --port=5000
-```
-Access the application at `http://localhost:5000`.
 
 ---
 
