@@ -1,4 +1,4 @@
-# 📸 SmartAttend — AI-Enabled Face Recognition Attendance & Academic Monitoring System
+# SmartAttend — AI-Enabled Face Recognition Attendance and Academic Monitoring System
 
 [![Phase](https://img.shields.io/badge/Phase-I%20Completed-brightgreen?style=for-the-badge&logo=github)](docs/SmartAttend_SRS.docx)
 [![Team](https://img.shields.io/badge/Team-Vision-blueviolet?style=for-the-badge)](https://github.com/ommahir7447/Team-Vision)
@@ -10,7 +10,7 @@
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 **SmartAttend** is an automated, AI-driven attendance and academic monitoring system designed to replace traditional manual roll calls and eliminate proxy attendance in university classrooms. Developed for **Karnavati University — Unitedworld Institute of Technology (UIT), Department of Computer Science & Engineering**, SmartAttend combines edge computing, deep-learning-based facial recognition, liveness anti-spoofing, real-time cloud data synchronization, and an **Agentic AI attendance planner**.
 
@@ -22,20 +22,20 @@ Beyond automated logging, SmartAttend empowers both educators and students throu
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-- 👁️ **Real-Time Facial Recognition**: Instant face detection and embedding matching against enrolled student databases.
-- 🛡️ **Liveness Detection (Anti-Spoofing)**: Prevents photo, screen, or video playback spoofing at classroom entry points.
-- 🎯 **Confidence-Based Routing**: Auto-logs verified matches above a threshold ($\ge 85\%$) and routes ambiguous cases to manual verification to prevent false positives.
-- ⚡ **Real-Time Cloud Sync**: Instant synchronization of attendance logs with cloud storage (Firebase Firestore / AWS DynamoDB).
-- 📲 **Same-Day Absence Notifications**: Automatic alerts triggered via FCM push notifications, Twilio SMS, or SMTP email.
-- ⚖️ **Student Appeal Workflow**: Transparent justification mechanism allowing students to contest missed or flagged records with faculty approval routing.
-- 📊 **Faculty Analytics & Defaulter Alerts**: Early warning system using historical attendance trends to flag students at risk of falling below the minimum $75\%$ threshold.
-- 🤖 **Agentic AI "What If?" Planner**: Powered by Claude / OpenAI API with function calling. Students can ask natural language questions (*"Can I miss Friday's DBMS lecture and stay above 75%?"*), and the agent calls backend tools (`get_attendance_history`, `calculate_projection`) to generate accurate, real-time answers.
+- **Real-Time Facial Recognition**: Instant face detection and embedding matching against enrolled student databases.
+- **Liveness Detection (Anti-Spoofing)**: Prevents photo, screen, or video playback spoofing at classroom entry points.
+- **Confidence-Based Routing**: Auto-logs verified matches above a threshold ($\ge 85\%$) and routes ambiguous cases to manual verification to prevent false positives.
+- **Real-Time Cloud Sync**: Instant synchronization of attendance logs with cloud storage (Firebase Firestore / AWS DynamoDB).
+- **Same-Day Absence Notifications**: Automatic alerts triggered via FCM push notifications, Twilio SMS, or SMTP email.
+- **Student Appeal Workflow**: Transparent justification mechanism allowing students to contest missed or flagged records with faculty approval routing.
+- **Faculty Analytics & Defaulter Alerts**: Early warning system using historical attendance trends to flag students at risk of falling below the minimum $75\%$ threshold.
+- **Agentic AI "What If?" Planner**: Powered by Claude / OpenAI API with function calling. Students can ask natural language questions (*"Can I miss Friday's DBMS lecture and stay above 75%?"*), and the agent calls backend tools (`get_attendance_history`, `calculate_projection`) to generate accurate, real-time answers.
 
 ---
 
-## 🛠️ Architecture & System Data Flow
+## Architecture & System Data Flow
 
 ```
 ┌─────────────────┐       ┌──────────────────────────────┐       ┌────────────────────────┐
@@ -64,7 +64,7 @@ Beyond automated logging, SmartAttend empowers both educators and students throu
 
 ---
 
-## 👥 Module Breakdown & Team Responsibilities
+## Module Breakdown and Team Responsibilities
 
 SmartAttend is structured into four cohesive development modules:
 
@@ -85,7 +85,7 @@ SmartAttend is structured into four cohesive development modules:
 
 ---
 
-## 🧰 Technology Stack
+## Technology Stack
 
 ### Backend & Infrastructure
 - **Language**: Python 3.10+
@@ -110,7 +110,7 @@ SmartAttend is structured into four cohesive development modules:
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```
 smartattend/
@@ -147,7 +147,7 @@ smartattend/
 
 ---
 
-## 🗄️ Database Schema Summary
+## Database Schema Summary
 
 The system models six key entities stored in the cloud database:
 
@@ -160,7 +160,7 @@ The system models six key entities stored in the cloud database:
 
 ---
 
-## ⚡ Quick Start & Local Setup
+## Quick Start and Local Setup
 
 ### Prerequisites
 - **Python 3.10+** installed
@@ -219,19 +219,19 @@ Access the application at `http://localhost:5000`.
 
 ---
 
-## 📄 Documentation Links
+## Documentation Links
 
 All formal technical documentation and architectural blueprints can be found in the [`docs/`](docs/) directory:
 
-- 📑 [Software Requirements Specification (SRS)](docs/SmartAttend_SRS.docx)
-- 🏗️ [System Architecture Diagram](docs/SmartAttend_Architecture_Diagram.png)
-- 🗂️ [Entity-Relationship (ER) Diagram](docs/SmartAttend_ER_Diagram.png)
-- 🧩 [Detailed Module Breakdown Document](docs/SmartAttend_Module_Breakdown.pdf)
-- 📊 [Phase-I Capstone Presentation Slides](docs/SmartAttend_Presentation2.pptx)
+- [Software Requirements Specification (SRS)](docs/SmartAttend_SRS.docx)
+- [System Architecture Diagram](docs/SmartAttend_Architecture_Diagram.png)
+- [Entity-Relationship (ER) Diagram](docs/SmartAttend_ER_Diagram.png)
+- [Detailed Module Breakdown Document](docs/SmartAttend_Module_Breakdown.pdf)
+- [Phase-I Capstone Presentation Slides](docs/SmartAttend_Presentation2.pptx)
 
 ---
 
-## 🌐 Deployment Plan
+## Deployment Plan
 
 - **Backend Hosting**: [Render](https://render.com/) or [Railway](https://railway.app/) (Flask WSGI application).
 - **Database & Storage**: Firebase Firestore & Firebase Storage.
@@ -240,7 +240,7 @@ All formal technical documentation and architectural blueprints can be found in 
 
 ---
 
-## 📜 License & Academic Credits
+## License and Academic Credits
 
 This project is developed as part of the **Capstone Project (Phase I & II)** curriculum at:
 - **Institution**: Karnavati University — Unitedworld Institute of Technology (UIT)
