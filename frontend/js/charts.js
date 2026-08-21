@@ -23,16 +23,16 @@ function destroyChart(canvasId) {
   }
 }
 
-/* ── Shared Chart.js defaults — University ERP theme ── */
-const FONT = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+/* ── Shared Chart.js defaults — Chic Enterprise theme ── */
+const FONT = "'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif";
 
 // Light-mode grid and tick colors
 const GRID_COLOR  = '#E2E8F0';
 const TICK_COLOR  = '#64748B';
-const LABEL_COLOR = '#475569';
+const LABEL_COLOR = '#334155';
 
-// Restrained palette: deep navy primary, slate secondary
-const PALETTE = ['#1E3A8A', '#64748B', '#0F172A', '#334155', '#475569'];
+// Vibrant jewel palette: Indigo, Cyan, Emerald, Amber, Violet
+const PALETTE = ['#4F46E5', '#0EA5E9', '#10B981', '#F59E0B', '#8B5CF6'];
 
 // Shared tooltip style
 const TOOLTIP = {
@@ -41,8 +41,8 @@ const TOOLTIP = {
   borderWidth:     1,
   titleColor:      '#F8FAFC',
   bodyColor:       '#CBD5E1',
-  padding:         10,
-  cornerRadius:    6,
+  padding:         12,
+  cornerRadius:    8,
   displayColors:   true,
 };
 
@@ -123,9 +123,9 @@ export function renderDonutChart(canvasId, present, absent, flagged = 0) {
     ? [present, absent, flagged]
     : [present, absent];
 
-  // Muted restrained semantic colors
-  const colors = ['#15803D', '#B91C1C', '#B45309'];
-  const bgs    = ['rgba(21, 128, 61, 0.15)', 'rgba(185, 28, 28, 0.15)', 'rgba(180, 83, 9, 0.15)'];
+  // Vibrant jewel semantic colors
+  const colors = ['#059669', '#E11D48', '#D97706'];
+  const bgs    = ['rgba(5, 150, 105, 0.15)', 'rgba(225, 29, 72, 0.15)', 'rgba(217, 119, 6, 0.15)'];
 
   _chartRegistry[canvasId] = new Chart(ctx, {
     type: 'doughnut',
@@ -171,7 +171,7 @@ export function renderStudentTrendChart(canvasId, trendData) {
   if (!ctx) return;
 
   const lastValue = trendData.data[trendData.data.length - 1];
-  const color = lastValue >= 75 ? '#1E3A8A' : '#B91C1C';
+  const color = lastValue >= 75 ? '#4F46E5' : '#E11D48';
 
   _chartRegistry[canvasId] = new Chart(ctx, {
     type: 'line',
@@ -230,14 +230,14 @@ export function renderStudentTrendChart(canvasId, trendData) {
         c.save();
         c.beginPath();
         c.setLineDash([5, 4]);
-        c.strokeStyle = '#B45309AA';
+        c.strokeStyle = '#D97706AA';
         c.lineWidth = 1.5;
         c.moveTo(chartArea.left, y75);
         c.lineTo(chartArea.right, y75);
         c.stroke();
 
         c.setLineDash([]);
-        c.fillStyle = '#B45309';
+        c.fillStyle = '#D97706';
         c.font = `600 10px ${FONT}`;
         c.fillText('75% Required', chartArea.right - 68, y75 - 5);
         c.restore();
@@ -258,10 +258,10 @@ export function renderSubjectBarChart(canvasId, subjects) {
   const labels = subjects.map(s => s.code || s.name);
   const data   = subjects.map(s => s.pct);
   const colors = data.map(v =>
-    v >= 75 ? '#15803D' : '#B91C1C'
+    v >= 75 ? '#059669' : '#E11D48'
   );
   const bgs = data.map(v =>
-    v >= 75 ? 'rgba(21, 128, 61, 0.15)' : 'rgba(185, 28, 28, 0.15)'
+    v >= 75 ? 'rgba(5, 150, 105, 0.15)' : 'rgba(225, 29, 72, 0.15)'
   );
 
   _chartRegistry[canvasId] = new Chart(ctx, {
