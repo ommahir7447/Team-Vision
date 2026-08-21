@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartAttend — University Attendance & Academic Management System</title>
+  <meta name="description" content="SmartAttend is an AI-powered face recognition attendance system for Karnavati University. Access the Faculty Dashboard or Student Portal." />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+    }
+
+    .landing-header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .landing-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .landing-logo-box {
+      width: 36px;
+      height: 36px;
+      background: var(--color-primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+    }
+
+    .landing-brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      line-height: 1.2;
+    }
+
+    .landing-brand-sub {
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .landing-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .portal-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text-muted);
+      margin-bottom: 12px;
+    }
+
+    .landing-heading {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .landing-desc {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      text-align: center;
+      max-width: 580px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .portal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 720px;
+      margin-bottom: 48px;
+    }
+
+    .portal-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .portal-card:hover {
+      border-color: #CBD5E1;
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .portal-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .portal-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-2);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border-light);
+    }
+
+    .portal-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+    }
+
+    .portal-card-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+
+    .portal-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-primary-light);
+    }
+
+    .tech-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .tech-badge {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      padding: 4px 12px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .landing-footer {
+      border-top: 1px solid var(--color-border);
+      background: var(--color-surface);
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .portal-grid { grid-template-columns: 1fr; }
+      .landing-header { padding: 12px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="landing-header" role="banner">
+    <div class="landing-brand">
+      <div class="landing-logo-box" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div>
+        <div class="landing-brand-title">SmartAttend</div>
+        <div class="landing-brand-sub">Karnavati University — UIT</div>
+      </div>
+    </div>
+    <div style="font-size: 12px; color: var(--color-text-muted); font-weight: 500;">
+      Academic Portal Gateway
+    </div>
+  </header>
+
+  <!-- Main Content Gateway -->
+  <main class="landing-main">
+    <p class="portal-eyebrow">SmartAttend Capstone Project &middot; Team Vision</p>
+    <h1 class="landing-heading">SmartAttend Portal</h1>
+    <p class="landing-desc">
+      Enterprise academic attendance monitoring system with face recognition verification,
+      liveness detection, and real-time class analytics. Select your portal to proceed.
+    </p>
+
+    <!-- Portal Selection Grid -->
+    <div class="portal-grid" role="navigation" aria-label="Portal Selection Gateway">
+      
+      <a href="faculty.html" class="portal-card" id="faculty-portal-btn">
+        <div class="portal-card-head">
+          <div class="portal-icon-wrapper">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-text-muted);">Faculty Access</span>
+        </div>
+        <div class="portal-card-title">Faculty Dashboard</div>
+        <div class="portal-card-desc">
+          Academic context filtering (Subject, Program, Semester, Section), live attendance logging, student records, and weekly trend metrics.
+        </div>
+        <div class="portal-card-link">
+          Enter Faculty Portal
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <a href="student.html" class="portal-card" id="student-portal-btn">
+        <div class="portal-card-head">
+          <div class="portal-icon-wrapper">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--color-text-muted);">Student Access</span>
+        </div>
+        <div class="portal-card-title">Student Portal</div>
+        <div class="portal-card-desc">
+          Individual attendance percentage tracker, 75% minimum threshold alerts, subject-wise statistics, logs, and official ERP student profile.
+        </div>
+        <div class="portal-card-link">
+          Enter Student Portal
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Tech Architecture Pills -->
+    <div class="tech-strip">
+      <span class="tech-badge">Flask REST API</span>
+      <span class="tech-badge">Firebase Firestore</span>
+      <span class="tech-badge">FaceNet / ArcFace</span>
+      <span class="tech-badge">Chart.js</span>
+      <span class="tech-badge">OpenCV Liveness</span>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <p>SmartAttend &middot; Team Vision &middot; B.Tech CSE Capstone Project &middot; Karnavati University (UIT)</p>
+    <p style="margin-top: 4px; color: var(--color-text-muted); font-size: 11px;">Frontend Module &mdash; Nidhi Tak (22BCS045)</p>
+  </footer>
+
+</body>
+</html>
+

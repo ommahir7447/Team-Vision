@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal — SmartAttend</title>
+  <meta name="description" content="SmartAttend Student Portal: view your attendance records, subject-wise breakdown, and academic history." />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/student.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- NOTE: Role-based access (student vs faculty) must be enforced by backend authentication.
+       This frontend represents the student role view only. No JWT implemented yet. -->
+
+  <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+
+  <div class="app-shell">
+
+    <!-- ── Sidebar ── -->
+    <aside id="sidebar" class="sidebar" role="navigation" aria-label="Student navigation">
+
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div>
+          <div class="sidebar-logo-text">SmartAttend</div>
+          <div class="sidebar-logo-subtitle">Student Portal</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main Menu</div>
+
+        <a href="#" class="nav-item active" data-view="dashboard" id="nav-dashboard" aria-current="page">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="attendance" id="nav-attendance">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </span>
+          <span>Attendance</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="subjects" id="nav-subjects">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </span>
+          <span>Subjects</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="history" id="nav-history">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          <span>Attendance History</span>
+        </a>
+
+        <a href="#" class="nav-item" data-view="profile" id="nav-profile">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <span>Profile</span>
+        </a>
+
+        <hr class="sidebar-divider" />
+        <div class="nav-section-label">Account</div>
+
+        <a href="#" class="nav-item" id="nav-settings">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>
+          <span>Settings</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="sidebar-profile-row">
+          <div class="avatar avatar-md" id="student-sidebar-avatar">NT</div>
+          <div class="sidebar-profile-info">
+            <div class="sidebar-profile-name" id="student-sidebar-name">Nidhi Tak</div>
+            <div class="sidebar-profile-role" id="student-sidebar-enroll">22BCS045</div>
+          </div>
+        </div>
+        <button class="sidebar-logout-btn" aria-label="Log out">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Log out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <div class="main-content">
+
+      <header class="topbar" role="banner">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div>
+            <div class="topbar-title" id="page-title">Student Dashboard</div>
+            <div class="topbar-subtitle" id="student-program-header">B.Tech Computer Science &amp; Engineering</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span class="topbar-date" id="header-date"></span>
+          <button class="notif-btn" id="notif-btn" aria-label="Notifications" title="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-dot" id="notif-dot"></span>
+          </button>
+          <div class="dropdown-wrapper">
+            <button class="avatar avatar-md" id="student-topbar-avatar" style="cursor:pointer;border:none;" aria-label="Account menu">NT</button>
+            <div class="dropdown-menu" id="account-dropdown">
+              <a href="#" class="dropdown-item" id="account-profile-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile
+              </a>
+              <a href="#" class="dropdown-item" id="account-edit-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit Profile
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger" id="account-logout-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-content" id="main-content">
+
+        <!-- ═══════════════════════════════════════
+             VIEW: DASHBOARD
+             ═══════════════════════════════════════ -->
+        <section id="view-dashboard" class="page-view">
+
+          <!-- Profile hero -->
+          <div class="student-hero">
+            <div class="avatar avatar-lg" id="student-avatar">NT</div>
+            <div class="student-hero-info">
+              <h1 class="student-hero-name" id="student-name">Nidhi Tak</h1>
+              <div class="student-hero-meta">
+                <span id="student-enrollment">22BCS045</span>
+                <span class="meta-sep">·</span>
+                <span id="student-program">B.Tech CSE</span>
+                <span class="meta-sep">·</span>
+                <span id="student-semester">Semester 6</span>
+              </div>
+            </div>
+            <div id="risk-alert" class="risk-alert" style="display:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span id="risk-alert-msg">Attendance below minimum threshold</span>
+            </div>
+          </div>
+
+          <!-- Quick stats -->
+          <div class="stats-grid" style="margin-bottom:var(--space-6);">
+            <div class="stat-card primary">
+              <div class="stat-icon primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="stat-value" id="quick-total">—</div>
+              <div class="stat-label">Total Classes</div>
+              <div class="stat-delta">This semester</div>
+            </div>
+            <div class="stat-card success">
+              <div class="stat-icon success">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stat-value" id="quick-present">—</div>
+              <div class="stat-label">Attended</div>
+              <div class="stat-delta up">Face-verified</div>
+            </div>
+            <div class="stat-card danger">
+              <div class="stat-icon danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <div class="stat-value" id="quick-absent">—</div>
+              <div class="stat-label">Missed</div>
+              <div class="stat-delta down">Not recorded</div>
+            </div>
+            <div class="stat-card warning">
+              <div class="stat-icon warning">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div class="stat-value" id="overall-pct-stat">—</div>
+              <div class="stat-label">Attendance Rate</div>
+              <div class="stat-delta" id="pct-note">Semester overall</div>
+            </div>
+          </div>
+
+          <!-- Charts row -->
+          <div class="charts-grid mb-6">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">Attendance Trend</h2>
+                  <div class="card-subtitle">Weekly attendance over the current semester</div>
+                </div>
+              </div>
+              <div class="chart-wrapper tall">
+                <canvas id="student-trend-chart" aria-label="Student attendance trend" role="img"></canvas>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">Subject-wise Overview</h2>
+                  <div class="card-subtitle">Attendance percentage per subject</div>
+                </div>
+              </div>
+              <div class="chart-wrapper tall">
+                <canvas id="subject-bar-chart" aria-label="Subject-wise attendance bar chart" role="img"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent history table (dashboard snapshot) -->
+          <div class="table-section">
+            <div class="table-section-header">
+              <div>
+                <div class="table-section-title">Recent Attendance</div>
+                <div class="table-section-meta">Last 7 records across all subjects</div>
+              </div>
+            </div>
+            <div class="table-container">
+              <table aria-label="Recent attendance records">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Subject</th>
+                    <th>Code</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                    <th>Verification</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             VIEW: ATTENDANCE OVERVIEW
+             ═══════════════════════════════════════ -->
+        <section id="view-attendance" class="page-view" hidden>
+
+          <div class="view-heading">
+            <h1 class="view-title">Attendance Overview</h1>
+            <p class="view-desc">Your overall attendance position for the current semester.</p>
+          </div>
+
+          <div class="stats-grid mb-6">
+            <div class="stat-card primary">
+              <div class="stat-icon primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div class="stat-value" id="att-total">—</div>
+              <div class="stat-label">Total Classes</div>
+              <div class="stat-delta">Scheduled this semester</div>
+            </div>
+            <div class="stat-card success">
+              <div class="stat-icon success">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stat-value" id="att-present">—</div>
+              <div class="stat-label">Classes Attended</div>
+              <div class="stat-delta up">Face-verified attendance</div>
+            </div>
+            <div class="stat-card danger">
+              <div class="stat-icon danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <div class="stat-value" id="att-absent">—</div>
+              <div class="stat-label">Classes Missed</div>
+              <div class="stat-delta down">No recognition recorded</div>
+            </div>
+            <div class="stat-card warning">
+              <div class="stat-icon warning">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div class="stat-value" id="att-rate">—</div>
+              <div class="stat-label">Overall Rate</div>
+              <div class="stat-delta">Minimum required: 75%</div>
+            </div>
+          </div>
+
+          <!-- Subject-wise attendance cards -->
+          <div class="card mb-6">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Subject-wise Attendance</h2>
+                <div class="card-subtitle">Attendance breakdown for each enrolled subject</div>
+              </div>
+            </div>
+            <div id="att-subject-rows" class="subject-att-list"></div>
+          </div>
+
+          <!-- Trend -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Attendance Trend</h2>
+                <div class="card-subtitle">Weekly attendance over the current semester</div>
+              </div>
+            </div>
+            <div class="chart-wrapper tall">
+              <canvas id="att-trend-chart" aria-label="Attendance trend chart" role="img"></canvas>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             VIEW: SUBJECTS
+             ═══════════════════════════════════════ -->
+        <section id="view-subjects" class="page-view" hidden>
+
+          <div class="view-heading">
+            <h1 class="view-title">My Subjects</h1>
+            <p class="view-desc">Enrolled subjects for the current semester with attendance details.</p>
+          </div>
+
+          <div class="table-section">
+            <div class="table-section-header">
+              <div class="table-section-title">Semester 6 — B.Tech CSE</div>
+              <div class="table-section-meta" id="subjects-count"></div>
+            </div>
+            <div id="subjects-loading" class="loading-state" style="padding:var(--space-6);">
+              <div class="skeleton skeleton-row"></div>
+              <div class="skeleton skeleton-row w-60"></div>
+              <div class="skeleton skeleton-row"></div>
+            </div>
+            <div class="table-container" id="subjects-table-wrap" style="display:none;">
+              <table id="subjects-table" aria-label="Enrolled subjects">
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Code</th>
+                    <th>Faculty</th>
+                    <th>Total</th>
+                    <th>Attended</th>
+                    <th>Missed</th>
+                    <th>Percentage</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="subjects-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             VIEW: ATTENDANCE HISTORY
+             ═══════════════════════════════════════ -->
+        <section id="view-history" class="page-view" hidden>
+
+          <div class="view-heading">
+            <h1 class="view-title">Attendance History</h1>
+            <p class="view-desc">Detailed record of your attendance across all subjects.</p>
+          </div>
+
+          <!-- Filters -->
+          <div class="filter-bar mb-6">
+            <div class="filter-bar-header">
+              <div class="filter-bar-title">Filter Records</div>
+              <button class="btn btn-outline" id="hist-clear-btn" style="font-size:12px;">Clear Filters</button>
+            </div>
+            <div class="filter-grid" style="grid-template-columns:2fr 1fr 1fr 1fr;">
+              <div class="filter-group">
+                <label class="filter-label" for="hist-subject">Subject</label>
+                <select id="hist-subject" class="filter-select">
+                  <option value="">All Subjects</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="hist-status">Status</label>
+                <select id="hist-status" class="filter-select">
+                  <option value="">All</option>
+                  <option value="Present">Present</option>
+                  <option value="Absent">Absent</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="hist-from">From Date</label>
+                <input type="date" id="hist-from" class="filter-select" />
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="hist-to">To Date</label>
+                <input type="date" id="hist-to" class="filter-select" />
+              </div>
+            </div>
+            <div class="filter-context-bar">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span class="filter-context-label">Showing:</span>
+              <span id="hist-record-count" class="filter-context-value">— records</span>
+            </div>
+          </div>
+
+          <div class="table-section">
+            <div class="table-section-header">
+              <div class="table-section-title">Attendance Records</div>
+            </div>
+            <div id="hist-loading" class="loading-state" style="padding:var(--space-6);display:none;">
+              <div class="skeleton skeleton-row"></div>
+              <div class="skeleton skeleton-row w-60"></div>
+              <div class="skeleton skeleton-row"></div>
+            </div>
+            <div id="hist-empty" class="empty-state" style="display:none;">
+              <div class="empty-state-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div class="empty-state-title">No records found</div>
+              <div class="empty-state-desc">No attendance records match the selected filters.</div>
+            </div>
+            <div class="table-container" id="hist-table-wrap">
+              <table id="hist-table" aria-label="Attendance history">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Subject</th>
+                    <th>Code</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                    <th>Verification</th>
+                  </tr>
+                </thead>
+                <tbody id="hist-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             VIEW: STUDENT PROFILE
+             ═══════════════════════════════════════ -->
+        <section id="view-profile" class="page-view" hidden>
+
+          <div class="view-heading">
+            <h1 class="view-title">Student Profile</h1>
+            <p class="view-desc">Personal and academic information as recorded in the institution's system.</p>
+          </div>
+
+          <!-- Profile header card -->
+          <div class="profile-header-card">
+            <div class="avatar avatar-lg" id="profile-avatar" style="width:56px;height:56px;font-size:18px;">NT</div>
+            <div class="profile-header-info">
+              <div class="profile-header-name" id="profile-name">Nidhi Tak</div>
+              <div class="profile-header-meta">
+                <span id="profile-enrollment">22BCS045</span>
+                <span class="meta-sep">·</span>
+                <span id="profile-program-short">B.Tech CSE</span>
+                <span class="meta-sep">·</span>
+                <span id="profile-semester-label">Semester 6</span>
+                <span class="meta-sep">·</span>
+                <span id="profile-section-label">Section C</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info grid -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Personal and Academic Information</h2>
+              <span style="font-size:11px;color:var(--color-text-muted);">All data is read-only. Contact the academic office for corrections.</span>
+            </div>
+            <div class="profile-info-grid" id="profile-info-grid">
+              <!-- Injected by student.js -->
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Notification Modal -->
+  <div id="notif-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-labelledby="notif-modal-title">
+      <div class="modal-header">
+        <div class="modal-title" id="notif-modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Student Notifications
+        </div>
+        <button class="modal-close" id="notif-close-btn" aria-label="Close notifications">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notif-list" id="notif-list">
+          <div class="notif-item unread">
+            <div class="notif-icon success">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="notif-content">
+              <div class="notif-item-title">Attendance Recorded</div>
+              <div class="notif-desc">Your attendance for Machine Learning (CS701) was verified via Face Recognition.</div>
+              <div class="notif-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="notif-item unread">
+            <div class="notif-icon alert">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="notif-content">
+              <div class="notif-item-title">Attendance Warning</div>
+              <div class="notif-desc">Your Cloud Computing attendance is at 74.3%, which is below the required 75%.</div>
+              <div class="notif-time">Yesterday</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-icon info">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div class="notif-content">
+              <div class="notif-item-title">Mid-Semester Summary</div>
+              <div class="notif-desc">Overall attendance report for Semester 6 is now available.</div>
+              <div class="notif-time">3 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="notif-read-all-btn">Mark all as read</button>
+        <button class="btn btn-primary" id="notif-done-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="edit-profile-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-labelledby="edit-modal-title">
+      <div class="modal-header">
+        <div class="modal-title" id="edit-modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Profile Information
+        </div>
+        <button class="modal-close" id="edit-profile-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-profile-form" style="display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <label class="filter-label" for="edit-email" style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;">Email Address</label>
+            <input type="email" id="edit-email" class="filter-select" value="nidhi.tak@karnavati.edu" style="width:100%;" required />
+          </div>
+          <div>
+            <label class="filter-label" for="edit-phone" style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;">Mobile Number</label>
+            <input type="tel" id="edit-phone" class="filter-select" value="+91 98765 43210" style="width:100%;" required />
+          </div>
+          <div>
+            <label class="filter-label" for="edit-address" style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;">Current Address</label>
+            <input type="text" id="edit-address" class="filter-select" value="Hostel Block B, Karnavati University Campus" style="width:100%;" required />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="edit-profile-cancel">Cancel</button>
+        <button class="btn btn-primary" id="edit-profile-save">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module" src="js/student.js"></script>
+</body>
+</html>
+
