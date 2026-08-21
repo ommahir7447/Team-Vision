@@ -22,3 +22,8 @@ scratch/
 build/
 dist/
 *.egg-info/
+
+# Recognition data
+/recognition/dataset/
+/recognition/embeddings.pkl
+/recognition/venv/
