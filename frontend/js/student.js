@@ -139,17 +139,22 @@ async function renderAttendance() {
       container.innerHTML = _subjects.map(sub => {
         const cls = sub.pct >= 80 ? 'high' : sub.pct >= 75 ? 'medium' : 'low';
         return `
-          <div class="subject-att-row">
-            <div class="subject-att-info">
-              <span class="subject-att-name">${sub.name}</span>
-              <span class="subject-att-code">${sub.code}</span>
-            </div>
-            <div class="subject-att-bar-wrap">
-              <div class="progress-track" style="flex:1;">
-                <div class="progress-fill ${cls}" style="width:${sub.pct}%"></div>
+          <div class="subject-att-card">
+            <div class="subject-att-left">
+              <div class="subject-att-title-row">
+                <span class="subject-att-name">${sub.name}</span>
+                <span class="subject-att-code">${sub.code}</span>
               </div>
+              <span class="subject-att-faculty">${sub.faculty || 'Computer Science & Eng.'}</span>
+            </div>
+            <div class="subject-att-progress-section">
+              <div class="subject-att-progress-bar">
+                <div class="subject-att-progress-fill ${cls}" style="width:${sub.pct}%"></div>
+              </div>
+            </div>
+            <div class="subject-att-right">
               <span class="subject-att-pct ${cls}">${sub.pct}%</span>
-              <span class="badge ${sub.pct >= 75 ? 'badge-present' : 'badge-absent'}">${sub.attended}/${sub.total}</span>
+              <span class="subject-att-fraction">${sub.attended}/${sub.total} Classes</span>
             </div>
           </div>`;
       }).join('');
@@ -362,12 +367,12 @@ function renderHistoryRows(tbodyId, records) {
   }
   tbody.innerHTML = records.map(r => `
     <tr>
-      <td style="white-space:nowrap;font-size:12px;">${formatDate(r.date)}</td>
-      <td class="td-primary">${r.subject}</td>
-      <td class="td-mono">${r.code}</td>
+      <td style="white-space:nowrap;font-size:12px;font-weight:600;color:#334155;">${formatDate(r.date)}</td>
+      <td class="td-primary" style="font-weight:600;color:#0F172A;">${r.subject}</td>
+      <td class="td-mono" style="color:#64748B;">${r.code}</td>
+      <td style="font-size:12px;color:#64748B;white-space:nowrap;">${r.time}</td>
+      <td style="font-size:12px;color:#64748B;">${r.verification}</td>
       <td>${statusBadge(r.status)}</td>
-      <td style="font-size:12px;color:var(--color-text-muted);white-space:nowrap;">${r.time}</td>
-      <td style="font-size:12px;color:var(--color-text-muted);">${r.verification}</td>
     </tr>`).join('');
 }
 
@@ -528,6 +533,7 @@ async function init() {
   try {
     const profile = await getStudentProfile();
     setText('student-name',         profile.name);
+    setText('hero-student-name',    profile.name);
     setText('student-enrollment',   profile.enrollment_no);
     setText('student-program',      profile.program.replace('B.Tech ', 'B.Tech '));
     setText('student-semester',     `Semester ${profile.semester}`);

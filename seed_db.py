@@ -55,7 +55,6 @@ def seed_database():
             {'id': 'S712', 'name': 'Laksh Solanki',    'enrollment': '22BCS712', 'email': 'laksh.s@karnavati.edu',      'sem': 7, 'sec': 'B'},
             {'id': 'S713', 'name': 'Mira Jain',        'enrollment': '22BCS713', 'email': 'mira.j@karnavati.edu',       'sem': 7, 'sec': 'B'},
             {'id': 'S714', 'name': 'Nikhil Rao',       'enrollment': '22BCS714', 'email': 'nikhil.r@karnavati.edu',     'sem': 7, 'sec': 'B'},
-            {'id': 'S715', 'name': 'Om Mahir',         'enrollment': '22BCS715', 'email': 'om.mahir@karnavati.edu',     'sem': 7, 'sec': 'B'},
         ]
 
         student_objs = []
@@ -117,8 +116,6 @@ def seed_database():
                         status, conf, vtype = 'Absent', None, None
                     elif s.user_id == 'S705' and day_offset == 1:
                         status, conf, vtype = 'Flagged', 0.63, 'Manual'
-                    elif s.user_id == 'S715' and day_offset == 2:
-                        status, conf, vtype = 'Flagged', 0.58, 'Manual'
                     elif s.user_id == 'S708' and day_offset in (3, 7):
                         status, conf, vtype = 'Absent', None, None
                     elif s.user_id == 'S712' and day_offset in (1, 4, 8):

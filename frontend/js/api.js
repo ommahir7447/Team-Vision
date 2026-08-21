@@ -16,41 +16,39 @@ function authHeaders() {
 }
 
 /* ── TREND LABELS (shared) ── */
-const WEEKS = ['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6','Wk 7','Wk 8'];
+const WEEKS = ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'];
 
-/* ================================================================
-   MOCK CLASS REGISTRY (Fallback Data)
-   ================================================================ */
+/*
+MOCK CLASS REGISTRY (Fallback Data)
+*/
 const MOCK_CLASSES = {
   'Machine Learning': {
     'B.Tech CSE': {
       'Semester 7': {
         'Section B': {
-          stats: { total:38, present:32, absent:4, flagged:2, rate:84.2 },
-          trend: { labels:WEEKS, datasets:[{ label:'Attendance %', data:[88,85,82,80,84,81,83,84] }] },
+          stats: { total: 38, present: 32, absent: 4, flagged: 2, rate: 84.2 },
+          trend: { labels: WEEKS, datasets: [{ label: 'Attendance %', data: [88, 85, 82, 80, 84, 81, 83, 84] }] },
           students: [
-            { id:'22BCS701', name:'Aarav Mehta',    status:'Present', confidence:0.97, time:'09:02 AM', type:'Auto'   },
-            { id:'22BCS702', name:'Bhavya Shah',    status:'Present', confidence:0.91, time:'09:04 AM', type:'Auto'   },
-            { id:'22BCS703', name:'Chirag Patel',   status:'Absent',  confidence:null,  time:'—',        type:null     },
-            { id:'22BCS704', name:'Diya Joshi',     status:'Present', confidence:0.88, time:'09:07 AM', type:'Auto'   },
-            { id:'22BCS705', name:'Esha Trivedi',   status:'Flagged', confidence:0.63, time:'09:09 AM', type:'Manual' },
-            { id:'22BCS706', name:'Farhan Khan',    status:'Present', confidence:0.95, time:'09:11 AM', type:'Auto'   },
-            { id:'22BCS707', name:'Gauri Desai',    status:'Present', confidence:0.82, time:'09:13 AM', type:'Auto'   },
-            { id:'22BCS708', name:'Harsh Gupta',    status:'Absent',  confidence:null,  time:'—',        type:null     },
-            { id:'22BCS709', name:'Isha Nair',      status:'Present', confidence:0.93, time:'09:15 AM', type:'Auto'   },
-            { id:'22BCS710', name:'Jay Verma',      status:'Present', confidence:0.79, time:'09:18 AM', type:'Auto'   },
-            { id:'22BCS711', name:'Kriti Agrawal',  status:'Present', confidence:0.96, time:'09:20 AM', type:'Auto'   },
-            { id:'22BCS712', name:'Laksh Solanki',  status:'Absent',  confidence:null,  time:'—',        type:null     },
-            { id:'22BCS713', name:'Mira Jain',      status:'Present', confidence:0.84, time:'09:22 AM', type:'Auto'   },
-            { id:'22BCS714', name:'Nikhil Rao',     status:'Present', confidence:0.90, time:'09:25 AM', type:'Auto'   },
-            { id:'22BCS715', name:'Om Mahir',       status:'Flagged', confidence:0.58, time:'09:27 AM', type:'Manual' },
+            { id: '22BCS701', name: 'Aarav Mehta', status: 'Present', confidence: 0.97, time: '09:02 AM', type: 'Auto' },
+            { id: '22BCS702', name: 'Bhavya Shah', status: 'Present', confidence: 0.91, time: '09:04 AM', type: 'Auto' },
+            { id: '22BCS703', name: 'Chirag Patel', status: 'Absent', confidence: null, time: '—', type: null },
+            { id: '22BCS704', name: 'Diya Joshi', status: 'Present', confidence: 0.88, time: '09:07 AM', type: 'Auto' },
+            { id: '22BCS705', name: 'Esha Trivedi', status: 'Flagged', confidence: 0.63, time: '09:09 AM', type: 'Manual' },
+            { id: '22BCS706', name: 'Farhan Khan', status: 'Present', confidence: 0.95, time: '09:11 AM', type: 'Auto' },
+            { id: '22BCS707', name: 'Gauri Desai', status: 'Present', confidence: 0.82, time: '09:13 AM', type: 'Auto' },
+            { id: '22BCS708', name: 'Harsh Gupta', status: 'Absent', confidence: null, time: '—', type: null },
+            { id: '22BCS709', name: 'Isha Nair', status: 'Present', confidence: 0.93, time: '09:15 AM', type: 'Auto' },
+            { id: '22BCS710', name: 'Jay Verma', status: 'Present', confidence: 0.79, time: '09:18 AM', type: 'Auto' },
+            { id: '22BCS711', name: 'Kriti Agrawal', status: 'Present', confidence: 0.96, time: '09:20 AM', type: 'Auto' },
+            { id: '22BCS712', name: 'Laksh Solanki', status: 'Absent', confidence: null, time: '—', type: null },
+            { id: '22BCS713', name: 'Mira Jain', status: 'Present', confidence: 0.84, time: '09:22 AM', type: 'Auto' },
+            { id: '22BCS714', name: 'Nikhil Rao', status: 'Present', confidence: 0.90, time: '09:25 AM', type: 'Auto' },
           ],
           activity: [
-            { name:'Aarav Mehta',  action:'marked Present',                 course:'Machine Learning', time:'2 min ago',  status:'present' },
-            { name:'Chirag Patel', action:'marked Absent (no detection)',    course:'Machine Learning', time:'4 min ago',  status:'absent'  },
-            { name:'Esha Trivedi', action:'flagged for manual review (63%)', course:'Machine Learning', time:'6 min ago',  status:'flagged' },
-            { name:'Diya Joshi',   action:'marked Present',                 course:'Machine Learning', time:'8 min ago',  status:'present' },
-            { name:'Om Mahir',     action:'flagged for manual review (58%)', course:'Machine Learning', time:'10 min ago', status:'flagged' },
+            { name: 'Aarav Mehta', action: 'marked Present', course: 'Machine Learning', time: '2 min ago', status: 'present' },
+            { name: 'Chirag Patel', action: 'marked Absent (no detection)', course: 'Machine Learning', time: '4 min ago', status: 'absent' },
+            { name: 'Esha Trivedi', action: 'flagged for manual review (63%)', course: 'Machine Learning', time: '6 min ago', status: 'flagged' },
+            { name: 'Diya Joshi', action: 'marked Present', course: 'Machine Learning', time: '8 min ago', status: 'present' },
           ],
         },
       },
@@ -60,11 +58,11 @@ const MOCK_CLASSES = {
     'B.Tech CSE': {
       'Semester 5': {
         'Section A': {
-          stats: { total:35, present:26, absent:9, flagged:0, rate:74.3 },
-          trend: { labels:WEEKS, datasets:[{ label:'Attendance %', data:[75,72,70,68,65,63,67,69] }] },
+          stats: { total: 35, present: 26, absent: 9, flagged: 0, rate: 74.3 },
+          trend: { labels: WEEKS, datasets: [{ label: 'Attendance %', data: [75, 72, 70, 68, 65, 63, 67, 69] }] },
           students: [
-            { id:'24BCS501', name:'Aman Singh',       status:'Present', confidence:0.90, time:'11:02 AM', type:'Auto' },
-            { id:'24BCS502', name:'Bhanu Pratap',     status:'Absent',  confidence:null,  time:'—',        type:null   },
+            { id: '24BCS501', name: 'Aman Singh', status: 'Present', confidence: 0.90, time: '11:02 AM', type: 'Auto' },
+            { id: '24BCS502', name: 'Bhanu Pratap', status: 'Absent', confidence: null, time: '—', type: null },
           ],
           activity: []
         }
@@ -98,16 +96,16 @@ const MOCK_STUDENT_PROFILE_FULL = {
 
 const MOCK_STUDENT_SUMMARY = { overall_pct: 78.4, total_classes: 120, present: 94, absent: 26, flagged: 0 };
 const MOCK_SUBJECTS = [
-  { course_id:'C101', code:'CS601', name:'Machine Learning',            total:42, attended:37, present:37, absent:5, pct:88.1, status:'Satisfactory' },
-  { course_id:'C102', code:'CS602', name:'Cloud Computing',             total:40, attended:32, present:32, absent:8, pct:80.0, status:'Satisfactory' },
-  { course_id:'C103', code:'CS603', name:'Cybersecurity',               total:38, attended:27, present:27, absent:11, pct:71.1, status:'Needs Attention' },
-  { course_id:'C104', code:'CS604', name:'Database Management Systems', total:36, attended:30, present:30, absent:6, pct:83.3, status:'Satisfactory' },
+  { course_id: 'C101', code: 'CS601', name: 'Machine Learning', total: 42, attended: 37, present: 37, absent: 5, pct: 88.1, status: 'Satisfactory' },
+  { course_id: 'C102', code: 'CS602', name: 'Cloud Computing', total: 40, attended: 32, present: 32, absent: 8, pct: 80.0, status: 'Satisfactory' },
+  { course_id: 'C103', code: 'CS603', name: 'Cybersecurity', total: 38, attended: 27, present: 27, absent: 11, pct: 71.1, status: 'Needs Attention' },
+  { course_id: 'C104', code: 'CS604', name: 'Database Management Systems', total: 36, attended: 30, present: 30, absent: 6, pct: 83.3, status: 'Satisfactory' },
 ];
 
 const MOCK_ATTENDANCE_HISTORY = [
-  { date:'2026-08-20', subject:'Machine Learning',            code:'CS601', status:'Present', time:'09:02 AM', verification:'Face Verified' },
-  { date:'2026-08-20', subject:'Cloud Computing',             code:'CS602', status:'Absent',  time:'—',        verification:'Not Recorded' },
-  { date:'2026-08-20', subject:'Cybersecurity',               code:'CS603', status:'Present', time:'02:04 PM', verification:'Face Verified' },
+  { date: '2026-08-20', subject: 'Machine Learning', code: 'CS601', status: 'Present', time: '09:02 AM', verification: 'Face Verified' },
+  { date: '2026-08-20', subject: 'Cloud Computing', code: 'CS602', status: 'Absent', time: '—', verification: 'Not Recorded' },
+  { date: '2026-08-20', subject: 'Cybersecurity', code: 'CS603', status: 'Present', time: '02:04 PM', verification: 'Face Verified' },
 ];
 
 const MOCK_STUDENT_TREND = { labels: WEEKS, data: [90, 85, 80, 75, 78, 73, 76, 78] };
@@ -152,7 +150,7 @@ export async function getFacultyProfile() {
 export async function getClassAttendanceData(subject, program, semester, section) {
   if (!USE_MOCK) {
     try {
-      const url = `${API_BASE}/attendance/class?subject=${encodeURIComponent(subject||'')}&program=${encodeURIComponent(program||'')}&semester=${encodeURIComponent(semester||'')}&section=${encodeURIComponent(section||'')}`;
+      const url = `${API_BASE}/attendance/class?subject=${encodeURIComponent(subject || '')}&program=${encodeURIComponent(program || '')}&semester=${encodeURIComponent(semester || '')}&section=${encodeURIComponent(section || '')}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
@@ -169,13 +167,13 @@ export async function getClassAttendanceData(subject, program, semester, section
 export async function getAttendanceTrend(subject, program, semester, section) {
   if (!USE_MOCK) {
     try {
-      const url = `${API_BASE}/attendance/class?subject=${encodeURIComponent(subject||'')}`;
+      const url = `${API_BASE}/attendance/class?subject=${encodeURIComponent(subject || '')}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
         return data.trend;
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   const data = _getOrCreateClassData(subject, program, semester, section);
   return data.trend;
@@ -184,13 +182,13 @@ export async function getAttendanceTrend(subject, program, semester, section) {
 export async function getRecentActivity(subject, program, semester, section) {
   if (!USE_MOCK) {
     try {
-      const url = `${API_BASE}/attendance/class?subject=${encodeURIComponent(subject||'')}`;
+      const url = `${API_BASE}/attendance/class?subject=${encodeURIComponent(subject || '')}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
         return data.activity;
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   const data = _getOrCreateClassData(subject, program, semester, section);
   return data.activity;
@@ -204,7 +202,7 @@ export async function getStudentProfile() {
     try {
       const res = await fetch(`${API_BASE}/student/profile`, { headers: authHeaders() });
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
   }
   return MOCK_STUDENT;
 }
@@ -214,7 +212,7 @@ export async function getStudentProfileFull() {
     try {
       const res = await fetch(`${API_BASE}/student/profile/full`, { headers: authHeaders() });
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
   }
   return MOCK_STUDENT_PROFILE_FULL;
 }
@@ -224,7 +222,7 @@ export async function getStudentAttendanceSummary() {
     try {
       const res = await fetch(`${API_BASE}/student/summary`, { headers: authHeaders() });
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
   }
   return MOCK_STUDENT_SUMMARY;
 }
@@ -234,7 +232,7 @@ export async function getSubjectWiseAttendance() {
     try {
       const res = await fetch(`${API_BASE}/student/subjects`, { headers: authHeaders() });
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
   }
   return MOCK_SUBJECTS;
 }
@@ -248,7 +246,7 @@ export async function getAttendanceHistory(limit = 20) {
     try {
       const res = await fetch(`${API_BASE}/student/history?limit=${limit}`, { headers: authHeaders() });
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
   }
   return MOCK_ATTENDANCE_HISTORY.slice(0, limit);
 }
@@ -262,7 +260,7 @@ export async function getStudentTrend() {
     try {
       const res = await fetch(`${API_BASE}/student/trend`, { headers: authHeaders() });
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
   }
   return MOCK_STUDENT_TREND;
 }
