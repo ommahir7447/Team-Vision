@@ -123,9 +123,15 @@ export function renderDonutChart(canvasId, present, absent, flagged = 0) {
     ? [present, absent, flagged]
     : [present, absent];
 
+<<<<<<< Updated upstream
   // Vibrant jewel semantic colors
   const colors = ['#059669', '#E11D48', '#D97706'];
   const bgs    = ['rgba(5, 150, 105, 0.15)', 'rgba(225, 29, 72, 0.15)', 'rgba(217, 119, 6, 0.15)'];
+=======
+  // Muted restrained semantic colors
+  const colors = ['#15803D', '#64748B', '#92400E'];
+  const bgs    = ['rgba(21, 128, 61, 0.15)', 'rgba(100, 116, 139, 0.15)', 'rgba(146, 64, 14, 0.15)'];
+>>>>>>> Stashed changes
 
   _chartRegistry[canvasId] = new Chart(ctx, {
     type: 'doughnut',
@@ -171,7 +177,11 @@ export function renderStudentTrendChart(canvasId, trendData) {
   if (!ctx) return;
 
   const lastValue = trendData.data[trendData.data.length - 1];
+<<<<<<< Updated upstream
   const color = lastValue >= 75 ? '#4F46E5' : '#E11D48';
+=======
+  const color = lastValue >= 75 ? '#1E3A8A' : '#64748B';
+>>>>>>> Stashed changes
 
   _chartRegistry[canvasId] = new Chart(ctx, {
     type: 'line',
@@ -229,17 +239,29 @@ export function renderStudentTrendChart(canvasId, trendData) {
 
         c.save();
         c.beginPath();
+<<<<<<< Updated upstream
         c.setLineDash([5, 4]);
         c.strokeStyle = '#D97706AA';
         c.lineWidth = 1.5;
+=======
+        c.setLineDash([3, 4]);
+        c.strokeStyle = '#94A3B866';
+        c.lineWidth = 1;
+>>>>>>> Stashed changes
         c.moveTo(chartArea.left, y75);
         c.lineTo(chartArea.right, y75);
         c.stroke();
 
         c.setLineDash([]);
+<<<<<<< Updated upstream
         c.fillStyle = '#D97706';
         c.font = `600 10px ${FONT}`;
         c.fillText('75% Required', chartArea.right - 68, y75 - 5);
+=======
+        c.fillStyle = '#94A3B8';
+        c.font = `500 9px ${FONT}`;
+        c.fillText('75%', chartArea.right - 24, y75 - 4);
+>>>>>>> Stashed changes
         c.restore();
       },
     }],
@@ -258,10 +280,17 @@ export function renderSubjectBarChart(canvasId, subjects) {
   const labels = subjects.map(s => s.code || s.name);
   const data   = subjects.map(s => s.pct);
   const colors = data.map(v =>
+<<<<<<< Updated upstream
     v >= 75 ? '#059669' : '#E11D48'
   );
   const bgs = data.map(v =>
     v >= 75 ? 'rgba(5, 150, 105, 0.15)' : 'rgba(225, 29, 72, 0.15)'
+=======
+    v >= 75 ? '#15803D' : '#94A3B8'
+  );
+  const bgs = data.map(v =>
+    v >= 75 ? 'rgba(21, 128, 61, 0.15)' : 'rgba(148, 163, 184, 0.18)'
+>>>>>>> Stashed changes
   );
 
   _chartRegistry[canvasId] = new Chart(ctx, {
@@ -314,9 +343,9 @@ export function renderSubjectBarChart(canvasId, subjects) {
         const y75 = scales.y.getPixelForValue(75);
         c.save();
         c.beginPath();
-        c.setLineDash([5, 4]);
-        c.strokeStyle = '#B45309AA';
-        c.lineWidth = 1.5;
+        c.setLineDash([3, 4]);
+        c.strokeStyle = '#94A3B866';
+        c.lineWidth = 1;
         c.moveTo(chartArea.left, y75);
         c.lineTo(chartArea.right, y75);
         c.stroke();
