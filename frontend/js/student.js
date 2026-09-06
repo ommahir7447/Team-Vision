@@ -17,6 +17,8 @@ import {
   getStudentProfileFull,
   getStudentSubjects,
   getFullAttendanceHistory,
+  uploadProfilePhoto,
+  removeProfilePhoto,
 } from './api.js';
 
 import { renderStudentTrendChart, renderSubjectBarChart } from './charts.js';
@@ -30,6 +32,9 @@ let _subjects  = null;
 let _history   = null;
 let _profile   = null;
 let _trend     = null;
+
+/* ── Cached photo URL ── */
+let _currentPhotoUrl = null;
 
 /* ================================================================
    VIEW ROUTER
@@ -297,62 +302,90 @@ async function applyHistoryFilters() {
    ================================================================ */
 async function renderProfile() {
   try {
-    _profile = _profile ?? await getStudentProfileFull();
-    const p = _profile;
+    const p = await getStudentProfileFull();
 
     // Header
-    setText('profile-name',         p.name);
-    setText('profile-enrollment',   p.enrollment_no);
-    setText('profile-program-short',`B.Tech ${p.branch}`);
-    setText('profile-semester-label',`Semester ${p.semester}`);
-    setText('profile-section-label', `Section ${p.section}`);
-    setText('profile-avatar',        p.initials);
+    setText('profile-name',          p.name);
+    setText('profile-enrollment',    p.enrollment_no);
+    setText('profile-program-short', `B.Tech ${p.branch || 'CSE'}`);
+    setText('profile-semester-label',`Semester ${p.semester || 7}`);
+    setText('profile-section-label', `Section ${p.section || 'B'}`);
+    setText('profile-avatar',        p.initials || 'ST');
 
-    // Two-column info grid
-    const grid = $('profile-info-grid');
-    if (!grid) return;
+    // Restore profile photo if available
+    if (p.profile_picture) {
+      _currentPhotoUrl = p.profile_picture;
+      updateAvatarUI(p.profile_picture, p.initials || 'ST');
+    } else {
+      _currentPhotoUrl = null;
+      updateAvatarUI(null, p.initials || 'ST');
+    }
 
-    const LEFT = [
-      ['Institute Code',       p.institute_code],
-      ['Name (as per 10th)',   p.name_10th],
-      ['Program / Branch',     p.program],
-      ['Date of Birth',        p.dob],
-      ['Mobile Number',        p.mobile],
-      ['Email ID',             p.email],
-      ['Category',             p.category],
-      ['Religion',             p.religion],
-      ['Batch',                p.batch],
+    const container = $('profile-sections-container');
+    if (!container) return;
+
+    const sections = [
+      {
+        title: 'Academic & Institute Details',
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
+        fields: [
+          { label: 'Institute Code', value: p.institute_code || 'KU-UIT-001', mono: true },
+          { label: 'Institute Name', value: p.institute_name || 'Unitedworld Institute of Technology' },
+          { label: 'Program / Degree', value: p.program || 'B.Tech Computer Science & Engineering' },
+          { label: 'Batch / Duration', value: p.batch || '2022–2026' },
+          { label: 'Current Semester', value: `Semester ${p.semester || 7} (Sec ${p.section || 'B'})` },
+          { label: 'Academic Year', value: p.academic_year || '2025–2026' },
+          { label: 'Application Number', value: p.application_no || 'KU2023BCS0009', mono: true },
+          { label: 'Admitted Year', value: p.admitted_year || '2022' },
+          { label: 'Date of Joining', value: p.doj || '01/08/2022' },
+        ]
+      },
+      {
+        title: 'Personal Information',
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        fields: [
+          { label: 'Full Name (Official)', value: p.name_10th || p.name },
+          { label: 'Gender', value: p.gender || 'Male' },
+          { label: 'Date of Birth', value: p.dob || '14/10/2003' },
+          { label: 'Blood Group', value: p.blood_group || 'B+' },
+          { label: 'Nationality', value: p.nationality || 'Indian' },
+          { label: 'Category', value: p.category || 'General' },
+          { label: 'Religion', value: p.religion || 'Hindu' },
+          { label: 'Marital Status', value: p.marital_status || 'Single' },
+        ]
+      },
+      {
+        title: 'Contact & Official Credentials',
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+        fields: [
+          { label: 'University Email', value: p.email, mono: true },
+          { label: 'Mobile Number', value: p.mobile || '+91 98765 43210' },
+          { label: 'Aadhaar / National ID', value: p.aadhar || 'XXXX XXXX 5892', mono: true },
+          { label: 'Enrollment Number', value: p.enrollment_no, mono: true },
+        ]
+      }
     ];
-    const RIGHT = [
-      ['Application Number',   p.application_no],
-      ['Academic Year',        p.academic_year],
-      ['Admitted Year',        p.admitted_year],
-      ['Gender',               p.gender],
-      ['Date of Joining',      p.doj],
-      ['Blood Group',          p.blood_group],
-      ['Nationality',          p.nationality],
-      ['Marital Status',       p.marital_status],
-      ['Aadhaar Number',       p.aadhar],
-    ];
 
-    grid.innerHTML = `
-      <div class="profile-col">
-        ${LEFT.map(([label, val]) => profileRow(label, val)).join('')}
+    container.innerHTML = sections.map(sec => `
+      <div class="profile-section-card">
+        <div class="profile-section-title">
+          ${sec.icon}
+          <span>${sec.title}</span>
+        </div>
+        <div class="profile-info-grid">
+          ${sec.fields.map(f => `
+            <div class="profile-field-tile">
+              <span class="profile-field-label">${f.label}</span>
+              <span class="profile-field-value ${f.mono ? 'mono' : ''}">${f.value || '—'}</span>
+            </div>
+          `).join('')}
+        </div>
       </div>
-      <div class="profile-col">
-        ${RIGHT.map(([label, val]) => profileRow(label, val)).join('')}
-      </div>`;
+    `).join('');
 
   } catch (err) {
     console.error('[student] renderProfile:', err);
   }
-}
-
-function profileRow(label, value) {
-  return `<div class="profile-row">
-    <dt class="profile-label">${label}</dt>
-    <dd class="profile-value">${value ?? '—'}</dd>
-  </div>`;
 }
 
 /* ================================================================
@@ -390,6 +423,81 @@ function formatDate(iso) {
 function setText(id, val) {
   const el = $(id);
   if (el) el.textContent = val ?? '—';
+}
+
+/* ================================================================
+   PROFILE PHOTO HELPERS
+   ================================================================ */
+/**
+ * Updates all avatar elements across the UI (Topbar, Sidebar, Profile card)
+ * to either show an image or fall back to initials text.
+ * @param {string|null} photoUrl - Full URL or null to show initials
+ * @param {string} initials      - e.g. "NT"
+ */
+function updateAvatarUI(photoUrl, initials) {
+  _currentPhotoUrl = photoUrl || null;
+
+  const profileCircle = $('profile-avatar');
+  const topbarBtn     = $('student-topbar-avatar');
+  const sidebarAvatar = $('student-sidebar-avatar');
+  const removeBtn     = $('profile-remove-photo-btn');
+
+  if (photoUrl) {
+    const fullUrl = photoUrl.startsWith('http') || photoUrl.startsWith('data:')
+      ? photoUrl
+      : `http://localhost:5000${photoUrl}`;
+
+    // Profile card
+    if (profileCircle) {
+      // Preserve the camera overlay element
+      const overlay = profileCircle.querySelector('.profile-avatar-overlay');
+      profileCircle.innerHTML = '';
+      const img1 = document.createElement('img');
+      img1.src = fullUrl;
+      img1.alt = 'Profile photo';
+      img1.className = 'avatar-photo';
+      profileCircle.appendChild(img1);
+      if (overlay) profileCircle.appendChild(overlay);
+    }
+
+    // Topbar
+    if (topbarBtn) {
+      topbarBtn.textContent = '';
+      const img2 = document.createElement('img');
+      img2.src = fullUrl;
+      img2.alt = 'Profile photo';
+      img2.className = 'avatar-photo';
+      img2.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;';
+      topbarBtn.appendChild(img2);
+    }
+
+    // Sidebar
+    if (sidebarAvatar) {
+      sidebarAvatar.textContent = '';
+      const img3 = document.createElement('img');
+      img3.src = fullUrl;
+      img3.alt = 'Profile photo';
+      img3.className = 'avatar-photo';
+      img3.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;';
+      sidebarAvatar.appendChild(img3);
+    }
+
+    // Show remove button
+    if (removeBtn) removeBtn.style.display = 'inline-flex';
+
+  } else {
+    // Restore initials everywhere
+    const overlay = profileCircle?.querySelector('.profile-avatar-overlay');
+    if (profileCircle) {
+      profileCircle.innerHTML = initials;
+      if (overlay) profileCircle.appendChild(overlay);
+    }
+    if (topbarBtn)     topbarBtn.textContent   = initials;
+    if (sidebarAvatar) sidebarAvatar.textContent = initials;
+
+    // Hide remove button
+    if (removeBtn) removeBtn.style.display = 'none';
+  }
 }
 
 /* ================================================================
@@ -514,6 +622,98 @@ function initModalsAndDropdowns() {
       showToast('Profile information updated successfully!');
     });
   }
+
+  // ── Profile Photo ──
+  const photoInput     = $('profile-photo-input');
+  const changPhotoBtn  = $('profile-change-photo-btn');
+  const removePhotoBtn = $('profile-remove-photo-btn');
+  const profileCircle  = $('profile-avatar');
+  const avatarOverlay  = $('profile-avatar-overlay');
+
+  // Trigger file picker from Change Photo button or avatar overlay click
+  const openFilePicker = () => photoInput && photoInput.click();
+  if (changPhotoBtn)  changPhotoBtn.addEventListener('click', openFilePicker);
+  if (avatarOverlay)  avatarOverlay.addEventListener('click', openFilePicker);
+
+  // Handle file selection → validate → upload → update UI
+  if (photoInput) {
+    photoInput.addEventListener('change', async () => {
+      const file = photoInput.files?.[0];
+      if (!file) return;
+
+      // Client-side validation
+      const ALLOWED = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+      if (!ALLOWED.includes(file.type)) {
+        showToast('⚠ Only PNG, JPG and WebP images are supported.');
+        photoInput.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('⚠ Image is too large. Maximum size is 5 MB.');
+        photoInput.value = '';
+        return;
+      }
+
+      // Preview instantly from local file before upload
+      const previewUrl = URL.createObjectURL(file);
+      const prevInitials = profileCircle?.querySelector('img.avatar-photo') ? '?' :
+        ($('student-topbar-avatar')?.textContent?.trim() || 'ST');
+      updateAvatarUI(previewUrl, prevInitials);
+
+      // Start upload animation
+      profileCircle && profileCircle.classList.add('uploading');
+
+      try {
+        const result = await uploadProfilePhoto(file);
+        profileCircle && profileCircle.classList.remove('uploading');
+        URL.revokeObjectURL(previewUrl);
+
+        if (result.profile_picture) {
+          updateAvatarUI(result.profile_picture, prevInitials);
+          showToast('✓ Profile photo updated successfully!');
+        } else {
+          showToast('⚠ Photo upload failed: ' + (result.error || 'Unknown error'));
+          updateAvatarUI(_currentPhotoUrl, prevInitials);
+        }
+      } catch (err) {
+        profileCircle && profileCircle.classList.remove('uploading');
+        URL.revokeObjectURL(previewUrl);
+        // If not authenticated, store preview locally using localStorage as Base64
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUri = e.target.result;
+          localStorage.setItem('student_profile_photo_local', dataUri);
+          updateAvatarUI(dataUri, prevInitials);
+          showToast('✓ Photo saved locally (sign in to sync to server).');
+        };
+        reader.readAsDataURL(file);
+      }
+
+      photoInput.value = '';
+    });
+  }
+
+  // Remove photo button
+  if (removePhotoBtn) {
+    removePhotoBtn.addEventListener('click', async () => {
+      const initials = $('student-topbar-avatar')?.textContent?.trim() ||
+                       $('student-sidebar-avatar')?.textContent?.trim() || 'ST';
+      // Optimistically clear UI first
+      updateAvatarUI(null, initials);
+      localStorage.removeItem('student_profile_photo_local');
+
+      try {
+        const result = await removeProfilePhoto();
+        if (result.message) {
+          showToast('✓ Profile photo removed.');
+        } else {
+          showToast('⚠ Could not remove photo from server, but cleared locally.');
+        }
+      } catch {
+        showToast('Photo cleared locally.');
+      }
+    });
+  }
 }
 
 /* ================================================================
@@ -532,19 +732,32 @@ async function init() {
   // Profile header fields
   try {
     const profile = await getStudentProfile();
-    setText('student-name',         profile.name);
-    setText('hero-student-name',    profile.name);
-    setText('student-enrollment',   profile.enrollment_no);
-    setText('student-program',      profile.program.replace('B.Tech ', 'B.Tech '));
-    setText('student-semester',     `Semester ${profile.semester}`);
-    setText('student-avatar',       profile.initials);
+    const displayName = (profile.enrollment_no && profile.name && profile.name.includes(profile.enrollment_no))
+      ? profile.name.replace(profile.enrollment_no, '').trim()
+      : (profile.name || 'Student');
+
+    setText('student-name',           displayName);
+    setText('hero-student-name',      displayName);
+    setText('student-enrollment',     profile.enrollment_no);
+    setText('student-program',        (profile.program || 'B.Tech CSE').replace('B.Tech ', 'B.Tech '));
+    setText('student-semester',       `Semester ${profile.semester || 7}`);
+    setText('student-avatar',         profile.initials);
     setText('student-sidebar-avatar', profile.initials);
-    setText('student-sidebar-name',   profile.name);
+    setText('student-sidebar-name',   displayName);
     setText('student-sidebar-enroll', profile.enrollment_no);
     setText('student-topbar-avatar',  profile.initials);
     ['student-avatar','student-sidebar-avatar','student-topbar-avatar'].forEach(id => {
-      const el = $(id); if (el) el.textContent = profile.initials;
+      const el = $(id); if (el) el.textContent = profile.initials || 'ST';
     });
+
+    // Restore profile photo: prefer server value, then localStorage fallback
+    const serverPhoto = profile.profile_picture;
+    const localPhoto  = localStorage.getItem('student_profile_photo_local');
+    const photoToLoad = serverPhoto || localPhoto || null;
+    if (photoToLoad) {
+      _currentPhotoUrl = photoToLoad;
+      updateAvatarUI(photoToLoad, profile.initials || 'ST');
+    }
   } catch (e) { /* non-critical */ }
 
   // Wire navigation

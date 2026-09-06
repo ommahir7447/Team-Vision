@@ -5,6 +5,7 @@ This module is fully self-contained — no dependency on recognition/ or feature
 """
 
 import os
+from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -25,7 +26,7 @@ def create_app(config_class=Config):
 
     # Initialize extensions
     db.init_app(app)
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
     JWTManager(app)
 
     # Register Module 2 blueprints
@@ -47,6 +48,13 @@ def create_app(config_class=Config):
     def student_page():
         return send_from_directory('../frontend', 'student.html')
 
+    @app.route('/uploads/<path:filename>')
+    def serve_uploads(filename):
+        return send_from_directory(
+            os.path.join(app.root_path, '..', 'uploads'),
+            filename
+        )
+
     @app.route('/<path:filename>')
     def serve_static(filename):
         return send_from_directory('../frontend', filename)
@@ -61,9 +69,27 @@ def create_app(config_class=Config):
             'institution': 'Karnavati University - UIT CSE'
         }), 200
 
+    # Ensure upload directory exists
+    upload_dir = Path(app.root_path).parent / 'uploads' / 'avatars'
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
     # Auto-create database tables on startup
     with app.app_context():
         db.create_all()
+        # Migrate: add profile_picture column if missing (for existing SQLite DBs)
+        try:
+            import sqlite3
+            db_path = Path(app.root_path).parent / 'smartattend.db'
+            if db_path.exists():
+                conn = sqlite3.connect(str(db_path))
+                cols = [row[1] for row in conn.execute('PRAGMA table_info(users)').fetchall()]
+                if 'profile_picture' not in cols:
+                    conn.execute('ALTER TABLE users ADD COLUMN profile_picture TEXT')
+                    conn.commit()
+                    print('[INFO] Migrated users table: added profile_picture column.')
+                conn.close()
+        except Exception as migrate_err:
+            print(f'[WARN] DB migration check failed: {migrate_err}')
 
     return app
 

@@ -23,6 +23,7 @@ class User(db.Model):
     section = db.Column(db.String(10), nullable=True, default='C')
     roll_number = db.Column(db.String(50), nullable=True)
     face_embedding_id = db.Column(db.String(100), nullable=True)
+    profile_picture = db.Column(db.Text, nullable=True)  # URL or Base64 data URI
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -41,5 +42,6 @@ class User(db.Model):
             'program': self.program,
             'semester': self.semester,
             'section': self.section,
-            'roll_number': self.roll_number
+            'roll_number': self.roll_number,
+            'profile_picture': self.profile_picture
         }

@@ -279,3 +279,53 @@ export async function submitPlannerQuery(query, student_id = 'S045') {
   return { answer: 'AI Planner service unavailable.' };
 }
 
+/**
+ * Upload a new profile photo for the currently logged-in student.
+ * Accepts a File object (from <input type="file">) and sends it as
+ * a Base64 data URI in a JSON body.
+ * @param {File} file - The image file to upload.
+ * @returns {Promise<{profile_picture: string}|{error: string}>}
+ */
+export async function uploadProfilePhoto(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const photoData = e.target.result; // data:image/...;base64,...
+      try {
+        const res = await fetch(`${API_BASE}/student/profile/photo`, {
+          method: 'POST',
+          headers: authHeaders(),
+          body: JSON.stringify({ photo_data: photoData }),
+        });
+        const json = await res.json();
+        if (res.ok) resolve(json);
+        else reject(json);
+      } catch (err) {
+        reject({ error: err.message || 'Upload failed' });
+      }
+    };
+    reader.onerror = () => reject({ error: 'Failed to read file' });
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Remove the current profile photo for the logged-in student.
+ * @returns {Promise<{message: string}|{error: string}>}
+ */
+export async function removeProfilePhoto() {
+  try {
+    const token = localStorage.getItem('smartattend_token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const res = await fetch(`${API_BASE}/student/profile/photo`, {
+      method: 'DELETE',
+      headers,
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('Remove photo error:', e);
+    return { error: 'Could not connect to server' };
+  }
+}
+

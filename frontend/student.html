@@ -131,7 +131,7 @@
             <span class="notif-dot" id="notif-dot"></span>
           </button>
           <div class="dropdown-wrapper">
-            <button class="avatar avatar-md" id="student-topbar-avatar" style="cursor:pointer;border:none;" aria-label="Account menu">AO</button>
+            <button class="avatar avatar-md" id="student-topbar-avatar" style="cursor:pointer;border:none;overflow:hidden;padding:0;" aria-label="Account menu">AO</button>
             <div class="dropdown-menu" id="account-dropdown">
               <a href="#" class="dropdown-item" id="account-profile-item">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -587,37 +587,52 @@
              ═══════════════════════════════════════ -->
         <section id="view-profile" class="page-view" hidden>
 
-          <div class="view-heading">
+          <div class="view-heading" style="margin-bottom:20px;">
             <h1 class="view-title">Student Profile</h1>
-            <p class="view-desc">Personal and academic information as recorded in the institution's system.</p>
+            <p class="view-desc">Verified academic and student registry information as recorded in Karnavati University.</p>
           </div>
 
           <!-- Profile header card -->
           <div class="profile-header-card">
-            <div class="avatar avatar-lg" id="profile-avatar" style="width:56px;height:56px;font-size:18px;">NT</div>
+            <div class="profile-avatar-box">
+              <div class="profile-avatar-circle" id="profile-avatar">NT
+                <div class="profile-avatar-overlay" id="profile-avatar-overlay" title="Change photo">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+              </div>
+              <div class="profile-status-dot" title="Active Student"></div>
+            </div>
             <div class="profile-header-info">
-              <div class="profile-header-name" id="profile-name">Nidhi Tak</div>
+              <div class="profile-name-row">
+                <div class="profile-header-name" id="profile-name">Nidhi Tak</div>
+                <div class="profile-verified-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  Verified Student
+                </div>
+              </div>
               <div class="profile-header-meta">
-                <span id="profile-enrollment">22BCS045</span>
-                <span class="meta-sep">·</span>
-                <span id="profile-program-short">B.Tech CSE</span>
-                <span class="meta-sep">·</span>
-                <span id="profile-semester-label">Semester 6</span>
-                <span class="meta-sep">·</span>
-                <span id="profile-section-label">Section C</span>
+                <span class="profile-pill highlight" id="profile-enrollment">22BCS045</span>
+                <span class="profile-pill" id="profile-program-short">B.Tech CSE</span>
+                <span class="profile-pill" id="profile-semester-label">Semester 7</span>
+                <span class="profile-pill" id="profile-section-label">Section B</span>
+              </div>
+              <!-- Photo action buttons -->
+              <div class="profile-photo-actions" id="profile-photo-actions">
+                <button class="btn-photo-change" id="profile-change-photo-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Change Photo
+                </button>
+                <button class="btn-photo-remove" id="profile-remove-photo-btn" style="display:none;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  Remove Photo
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- Info grid -->
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Personal and Academic Information</h2>
-              <span style="font-size:11px;color:var(--color-text-muted);">All data is read-only. Contact the academic office for corrections.</span>
-            </div>
-            <div class="profile-info-grid" id="profile-info-grid">
-              <!-- Injected by student.js -->
-            </div>
+          <!-- Profile Information Sections -->
+          <div id="profile-sections-container">
+            <!-- Injected by student.js -->
           </div>
 
         </section>
@@ -711,6 +726,15 @@
   </div>
 
   <div id="toast-container" class="toast-container"></div>
+
+  <!-- Hidden file input for profile photo upload -->
+  <input
+    type="file"
+    id="profile-photo-input"
+    accept="image/png, image/jpeg, image/jpg, image/webp"
+    style="display:none;"
+    aria-label="Upload profile photo"
+  />
 
   <script type="module" src="js/student.js"></script>
 </body>
