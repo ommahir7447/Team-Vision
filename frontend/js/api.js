@@ -329,3 +329,160 @@ export async function removeProfilePhoto() {
   }
 }
 
+/* ================================================================
+   ENHANCED FACULTY APIs
+   ================================================================ */
+export async function getFacultyTimetable(faculty_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/timetable?faculty_id=${faculty_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { slots: [], by_day: {}, total_classes_per_week: 0 };
+}
+
+export async function getFacultySubjects(faculty_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/subjects?faculty_id=${faculty_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return [];
+}
+
+export async function getFacultyClassWeeks(faculty_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/class-weeks?faculty_id=${faculty_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total_per_week: 0, breakdown: {} };
+}
+
+export async function getFacultyStudents(faculty_id = 'F001', search = '', course_id = '') {
+  try {
+    const url = `${API_BASE}/faculty/students?faculty_id=${faculty_id}&search=${encodeURIComponent(search)}&course_id=${encodeURIComponent(course_id)}`;
+    const res = await fetch(url);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total: 0, students: [] };
+}
+
+export async function getFacultyStudentDetail(student_id) {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/student/${student_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+
+export async function getFacultyDefaulters(faculty_id = 'F001', threshold = 75) {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/defaulters?faculty_id=${faculty_id}&threshold=${threshold}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { threshold: 75, count: 0, defaulters: [] };
+}
+
+export async function getFacultyAppeals(faculty_id = 'F001', status = '') {
+  try {
+    const url = `${API_BASE}/faculty/appeals?faculty_id=${faculty_id}&status=${encodeURIComponent(status)}`;
+    const res = await fetch(url);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total: 0, appeals: [] };
+}
+
+export async function reviewAppeal(appeal_id, action, faculty_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/appeals/${appeal_id}/review?faculty_id=${faculty_id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
+    });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { error: 'Failed to review appeal' };
+}
+
+export async function getFacultyAnalytics(faculty_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/faculty/analytics?faculty_id=${faculty_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total_enrolled: 0, avg_attendance_rate: 0, defaulters_count: 0, course_rates: [], weekly_trend: { labels: [], data: [] } };
+}
+
+export function getFacultyExportURL(faculty_id = 'F001', course_id = '') {
+  return `${API_BASE}/faculty/reports/export?faculty_id=${faculty_id}&course_id=${encodeURIComponent(course_id)}`;
+}
+
+/* ================================================================
+   MENTOR DASHBOARD APIs
+   ================================================================ */
+export async function getMentorProfile(mentor_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/profile?mentor_id=${mentor_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { mentor_id: 'F001', name: 'Dr. Priya Sharma', department: 'CSE', initials: 'PS', total_mentees: 0 };
+}
+
+export async function getMentees(mentor_id = 'F001', search = '') {
+  try {
+    const url = `${API_BASE}/mentor/mentees?mentor_id=${mentor_id}&search=${encodeURIComponent(search)}`;
+    const res = await fetch(url);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total: 0, mentees: [] };
+}
+
+export async function getMenteeDetail(student_id, mentor_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/mentee/${student_id}?mentor_id=${mentor_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+
+export async function getMenteeAttendance(student_id, mentor_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/mentee/${student_id}/attendance?mentor_id=${mentor_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { student_id, overall_pct: 0, subjects: [] };
+}
+
+export async function getMenteeHistory(student_id, mentor_id = 'F001', limit = 30) {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/mentee/${student_id}/history?mentor_id=${mentor_id}&limit=${limit}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return [];
+}
+
+export async function getMentorAnalytics(mentor_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/analytics?mentor_id=${mentor_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total_mentees: 0, avg_attendance: 0, at_risk_count: 0, satisfactory_count: 0, mentee_rates: [] };
+}
+
+export async function getMentorAlerts(mentor_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/alerts?mentor_id=${mentor_id}`);
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { total_alerts: 0, alerts: [] };
+}
+
+export async function updateMenteeNotes(student_id, notes, mentor_id = 'F001') {
+  try {
+    const res = await fetch(`${API_BASE}/mentor/mentee/${student_id}/notes?mentor_id=${mentor_id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes }),
+    });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return { error: 'Failed to update notes' };
+}
+

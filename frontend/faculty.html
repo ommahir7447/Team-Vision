@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Faculty Dashboard — SmartAttend</title>
-  <meta name="description" content="SmartAttend Faculty Portal: monitor attendance by subject, program, semester and section. AI face-recognition verified." />
+  <meta name="description" content="SmartAttend Faculty Portal: timetable, subjects, student management, attendance analytics, appeals review, and reports." />
   <link rel="stylesheet" href="css/design-system.css" />
   <link rel="stylesheet" href="css/faculty.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -33,36 +33,58 @@
       <nav class="sidebar-nav">
         <div class="nav-section-label">Main Menu</div>
 
-        <a href="faculty.html" class="nav-item active" id="nav-dashboard" aria-current="page">
+        <a href="#" class="nav-item active" data-section="dashboard" id="nav-dashboard">
           <span class="nav-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           </span>
           <span>Dashboard</span>
         </a>
 
-        <a href="#" class="nav-item" id="nav-attendance">
+        <a href="#" class="nav-item" data-section="timetable" id="nav-timetable">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          <span>Timetable</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="subjects" id="nav-subjects">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </span>
+          <span>My Subjects</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="attendance" id="nav-attendance">
           <span class="nav-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           </span>
           <span>Attendance</span>
-          <span class="nav-badge">8</span>
         </a>
 
-        <a href="#" class="nav-item" id="nav-courses">
-          <span class="nav-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          </span>
-          <span>Courses</span>
-        </a>
-
-        <a href="#" class="nav-item" id="nav-students">
+        <a href="#" class="nav-item" data-section="students" id="nav-students">
           <span class="nav-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </span>
           <span>Students</span>
         </a>
 
-        <a href="#" class="nav-item" id="nav-reports">
+        <a href="#" class="nav-item" data-section="defaulters" id="nav-defaulters">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </span>
+          <span>Defaulters</span>
+          <span class="nav-badge" id="defaulter-badge">0</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="appeals" id="nav-appeals">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </span>
+          <span>Appeals</span>
+          <span class="nav-badge" id="appeal-badge">0</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="reports" id="nav-reports">
           <span class="nav-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </span>
@@ -70,25 +92,15 @@
         </a>
 
         <hr class="sidebar-divider" />
-        <div class="nav-section-label">Support</div>
+        <div class="nav-section-label">Portals</div>
 
-        <a href="#" class="nav-item" id="nav-settings">
+        <a href="mentor.html" class="nav-item" id="nav-mentor-portal">
           <span class="nav-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </span>
-          <span>Settings</span>
+          <span>Mentor Portal</span>
         </a>
 
-        <a href="#" class="nav-item" id="nav-help">
-          <span class="nav-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          </span>
-          <span>Help &amp; Support</span>
-        </a>
-
-        <hr class="sidebar-divider" />
-        <!-- NOTE: Portal switching is not shown here.
-             Role-based access must be enforced by backend authentication. -->
         <a href="index.html" class="nav-item" id="nav-home">
           <span class="nav-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -106,7 +118,7 @@
             <div class="sidebar-profile-role">Faculty &middot; CSE Dept.</div>
           </div>
         </div>
-        <button class="sidebar-logout-btn" aria-label="Log out">
+        <button class="sidebar-logout-btn" id="sidebar-logout-btn" aria-label="Log out">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Log out
         </button>
@@ -126,7 +138,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
           <div>
-            <div class="topbar-title">Faculty Dashboard</div>
+            <div class="topbar-title" id="topbar-title">Faculty Dashboard</div>
             <div class="topbar-subtitle" id="faculty-dept">Computer Science &amp; Engineering</div>
           </div>
         </div>
@@ -144,10 +156,6 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Profile
               </a>
-              <a href="#" class="dropdown-item" id="account-edit-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit Profile
-              </a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item danger" id="account-logout-item">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -158,222 +166,259 @@
         </div>
       </header>
 
-      <!-- Page Content -->
+      <!-- Page Content — SPA sections toggled by JS -->
       <main class="page-content" id="main-content">
 
-        <!-- ── Academic Context Filter Bar ── -->
-        <section class="filter-bar" aria-label="Academic class filter">
-
-          <div class="filter-bar-header">
-            <div class="filter-bar-title">
-              Select Academic Class
-            </div>
-            <div class="filter-rate-badge" id="filter-rate-badge">—</div>
-          </div>
-
-          <div class="filter-grid">
-
-            <div class="filter-group">
-              <label class="filter-label" for="filter-subject">Subject / Course</label>
-              <select id="filter-subject" class="filter-select" aria-label="Select subject or course">
-                <option value="" disabled selected>— Select Subject —</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label class="filter-label" for="filter-program">Program / Branch</label>
-              <select id="filter-program" class="filter-select" disabled aria-label="Select program or branch">
-                <option value="" disabled selected>— Select Program —</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label class="filter-label" for="filter-semester">Semester</label>
-              <select id="filter-semester" class="filter-select" disabled aria-label="Select semester">
-                <option value="" disabled selected>— Semester —</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label class="filter-label" for="filter-section">Section</label>
-              <select id="filter-section" class="filter-select" disabled aria-label="Select section">
-                <option value="" disabled selected>— Section —</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label class="filter-label" for="filter-date">Date</label>
-              <input type="date" id="filter-date" class="filter-select" aria-label="Select date" />
-            </div>
-
-          </div>
-
-          <div class="filter-context-bar">
-            <span class="filter-context-icon" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            </span>
-            <span class="filter-context-label">Viewing attendance for:</span>
-            <span id="filter-context-text" class="filter-context-value">Select a class to begin</span>
-          </div>
-
-        </section>
-
-        <!-- ── Summary Statistics ── -->
-        <section aria-label="Summary statistics">
-          <div class="stats-grid" id="stats-grid">
-
+        <!-- ══════════ SECTION: Dashboard ══════════ -->
+        <section id="section-dashboard" class="dashboard-section active-section">
+          <!-- Quick stats row -->
+          <div class="stats-grid" id="dashboard-stats-grid">
             <div class="stat-card primary">
-              <div class="stat-icon primary" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </div>
-              <div class="stat-value" id="stat-total">—</div>
-              <div class="stat-label">Total Students</div>
-              <div class="stat-delta">Enrolled in this class</div>
+              <div class="stat-icon primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+              <div class="stat-value" id="dash-total-courses">—</div>
+              <div class="stat-label">Total Courses</div>
+              <div class="stat-delta">Assigned to you</div>
             </div>
-
             <div class="stat-card success">
-              <div class="stat-icon success" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <div class="stat-value" id="stat-present">—</div>
-              <div class="stat-label">Present Today</div>
-              <div class="stat-delta up" id="present-delta">Face-recognition verified</div>
+              <div class="stat-icon success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+              <div class="stat-value" id="dash-total-students">—</div>
+              <div class="stat-label">Total Students</div>
+              <div class="stat-delta">Across all courses</div>
             </div>
-
-            <div class="stat-card danger">
-              <div class="stat-icon danger" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </div>
-              <div class="stat-value" id="stat-absent">—</div>
-              <div class="stat-label">Absent / Flagged</div>
-              <div class="stat-delta down">Not auto-verified</div>
-            </div>
-
             <div class="stat-card warning">
-              <div class="stat-icon warning" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              </div>
-              <div class="stat-value" id="stat-rate">—</div>
-              <div class="stat-label">Attendance Rate</div>
-              <div class="stat-delta" id="rate-delta">Semester average</div>
+              <div class="stat-icon warning"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+              <div class="stat-value" id="dash-avg-rate">—</div>
+              <div class="stat-label">Avg Attendance</div>
+              <div class="stat-delta" id="dash-rate-delta">Semester average</div>
             </div>
-
+            <div class="stat-card danger">
+              <div class="stat-icon danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="stat-value" id="dash-defaulters">—</div>
+              <div class="stat-label">At-Risk Students</div>
+              <div class="stat-delta">Below 75% threshold</div>
+            </div>
           </div>
-        </section>
 
-        <!-- ── Analytics Charts ── -->
-        <section aria-label="Attendance analytics" class="mb-6">
+          <!-- Today's Schedule + Analytics Chart -->
           <div class="charts-grid">
-
-            <!-- Attendance Trend -->
             <div class="card">
               <div class="card-header">
                 <div>
-                  <h2 class="card-title">Attendance Trend</h2>
-                  <div class="card-subtitle">Weekly attendance performance for the selected class</div>
+                  <h2 class="card-title">Today's Schedule</h2>
+                  <div class="card-subtitle">Your classes for today</div>
                 </div>
-                <span id="trend-chart-label" class="text-sm text-muted">Last 8 weeks</span>
+                <span class="text-sm text-muted" id="today-day-label"></span>
               </div>
-              <div class="chart-wrapper tall">
-                <canvas id="trend-chart" aria-label="Attendance trend line chart" role="img"></canvas>
+              <div id="today-schedule-list" class="today-schedule-list">
+                <div class="loading-state"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row w-60"></div></div>
               </div>
             </div>
-
-            <!-- Today's Class Summary -->
             <div class="card">
               <div class="card-header">
                 <div>
-                  <h2 class="card-title">Today's Summary</h2>
-                  <div class="card-subtitle">Present vs. Absent breakdown</div>
+                  <h2 class="card-title">Subject Performance</h2>
+                  <div class="card-subtitle">Attendance rate by course</div>
                 </div>
               </div>
-              <div class="chart-wrapper">
-                <canvas id="donut-chart" aria-label="Present vs Absent donut chart" role="img"></canvas>
-              </div>
+              <div class="chart-wrapper"><canvas id="subject-perf-chart" aria-label="Subject performance chart"></canvas></div>
             </div>
+          </div>
 
+          <!-- Quick Links -->
+          <div class="quick-actions-grid">
+            <button class="quick-action-card" data-goto="timetable">
+              <div class="quick-action-icon" style="background:var(--color-primary-bg);color:var(--color-primary-accent)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <span>View Timetable</span>
+            </button>
+            <button class="quick-action-card" data-goto="defaulters">
+              <div class="quick-action-icon" style="background:var(--color-danger-bg);color:var(--color-danger)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <span>Defaulter Report</span>
+            </button>
+            <button class="quick-action-card" data-goto="appeals">
+              <div class="quick-action-icon" style="background:var(--color-warning-bg);color:var(--color-warning)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <span>Review Appeals</span>
+            </button>
+            <button class="quick-action-card" data-goto="reports">
+              <div class="quick-action-icon" style="background:var(--color-success-bg);color:var(--color-success)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+              <span>Export Reports</span>
+            </button>
           </div>
         </section>
 
-        <!-- ── Today's Attendance Table ── -->
-        <section class="table-section mb-6" aria-label="Today's attendance records">
-
-          <div class="table-section-header">
+        <!-- ══════════ SECTION: Timetable ══════════ -->
+        <section id="section-timetable" class="dashboard-section" style="display:none">
+          <div class="section-header-bar">
             <div>
-              <div class="table-section-title">Today's Attendance</div>
-              <div class="table-section-meta" id="table-context-label"></div>
+              <h1 class="section-title">Weekly Timetable</h1>
+              <p class="section-subtitle">Your class schedule for the week</p>
+            </div>
+            <div class="section-meta"><span id="tt-total-classes" class="badge badge-auto">0 classes/week</span></div>
+          </div>
+          <div id="timetable-grid" class="timetable-grid">
+            <div class="loading-state"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row w-60"></div><div class="skeleton skeleton-row"></div></div>
+          </div>
+        </section>
+
+        <!-- ══════════ SECTION: Subjects ══════════ -->
+        <section id="section-subjects" class="dashboard-section" style="display:none">
+          <div class="section-header-bar">
+            <div>
+              <h1 class="section-title">My Subjects</h1>
+              <p class="section-subtitle">All courses you teach with attendance analytics</p>
             </div>
           </div>
+          <div id="subjects-grid" class="subjects-cards-grid">
+            <div class="loading-state"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row w-60"></div></div>
+          </div>
+        </section>
 
-          <!-- Loading skeleton -->
-          <div id="table-loading" style="display:none;">
-            <div class="loading-state">
-              <div class="skeleton skeleton-row"></div>
-              <div class="skeleton skeleton-row w-60"></div>
-              <div class="skeleton skeleton-row"></div>
-              <div class="skeleton skeleton-row w-40"></div>
-              <div class="skeleton skeleton-row"></div>
+        <!-- ══════════ SECTION: Attendance (original filter-based) ══════════ -->
+        <section id="section-attendance" class="dashboard-section" style="display:none">
+          <!-- Filter bar -->
+          <section class="filter-bar" aria-label="Academic class filter">
+            <div class="filter-bar-header">
+              <div class="filter-bar-title">Select Academic Class</div>
+              <div class="filter-rate-badge" id="filter-rate-badge">—</div>
             </div>
+            <div class="filter-grid">
+              <div class="filter-group">
+                <label class="filter-label" for="filter-subject">Subject / Course</label>
+                <select id="filter-subject" class="filter-select"><option value="" disabled selected>— Select Subject —</option></select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="filter-program">Program</label>
+                <select id="filter-program" class="filter-select" disabled><option value="" disabled selected>— Select Program —</option></select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="filter-semester">Semester</label>
+                <select id="filter-semester" class="filter-select" disabled><option value="" disabled selected>— Semester —</option></select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="filter-section">Section</label>
+                <select id="filter-section" class="filter-select" disabled><option value="" disabled selected>— Section —</option></select>
+              </div>
+              <div class="filter-group">
+                <label class="filter-label" for="filter-date">Date</label>
+                <input type="date" id="filter-date" class="filter-select" />
+              </div>
+            </div>
+            <div class="filter-context-bar">
+              <span class="filter-context-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+              <span class="filter-context-label">Viewing:</span>
+              <span id="filter-context-text" class="filter-context-value">Select a class to begin</span>
+            </div>
+          </section>
+
+          <!-- Stats -->
+          <div class="stats-grid" id="stats-grid">
+            <div class="stat-card primary"><div class="stat-icon primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-value" id="stat-total">—</div><div class="stat-label">Total Students</div><div class="stat-delta">Enrolled in this class</div></div>
+            <div class="stat-card success"><div class="stat-icon success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stat-value" id="stat-present">—</div><div class="stat-label">Present Today</div><div class="stat-delta up" id="present-delta">Face-recognition verified</div></div>
+            <div class="stat-card danger"><div class="stat-icon danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="stat-value" id="stat-absent">—</div><div class="stat-label">Absent / Flagged</div><div class="stat-delta down">Not auto-verified</div></div>
+            <div class="stat-card warning"><div class="stat-icon warning"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="stat-value" id="stat-rate">—</div><div class="stat-label">Attendance Rate</div><div class="stat-delta" id="rate-delta">Semester average</div></div>
           </div>
 
-          <!-- Error state -->
-          <div id="table-error" class="error-state" style="display:none; margin:var(--space-4);">
-            <span class="error-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            </span>
-            <span>Unable to load attendance data. Please try again.</span>
-          </div>
-
-          <div id="table-empty" class="empty-state" style="display:none;">
-            <div class="empty-state-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            </div>
-            <div class="empty-state-title">No attendance records</div>
-            <div class="empty-state-desc">No attendance records are available for the selected class and date. Records will appear once the recognition session begins.</div>
+          <!-- Charts -->
+          <div class="charts-grid">
+            <div class="card"><div class="card-header"><div><h2 class="card-title">Attendance Trend</h2><div class="card-subtitle">Weekly performance</div></div></div><div class="chart-wrapper tall"><canvas id="trend-chart"></canvas></div></div>
+            <div class="card"><div class="card-header"><div><h2 class="card-title">Today's Summary</h2><div class="card-subtitle">Present vs Absent</div></div></div><div class="chart-wrapper"><canvas id="donut-chart"></canvas></div></div>
           </div>
 
           <!-- Attendance Table -->
-          <div class="table-container" id="table-container">
-            <table id="attendance-table" aria-label="Student attendance records">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Roll No.</th>
-                  <th scope="col">Student Name</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Confidence</th>
-                  <th scope="col">Time</th>
-                  <th scope="col">Verification</th>
-                </tr>
-              </thead>
-              <tbody id="attendance-table-body">
-                <!-- Injected by faculty.js -->
-              </tbody>
-            </table>
-          </div>
+          <section class="table-section mb-6">
+            <div class="table-section-header"><div><div class="table-section-title">Today's Attendance</div><div class="table-section-meta" id="table-context-label"></div></div></div>
+            <div id="table-loading" style="display:none;"><div class="loading-state"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row w-60"></div><div class="skeleton skeleton-row"></div></div></div>
+            <div id="table-error" class="error-state" style="display:none;margin:var(--space-4);"><span>Unable to load attendance data.</span></div>
+            <div id="table-empty" class="empty-state" style="display:none;"><div class="empty-state-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div class="empty-state-title">No attendance records</div><div class="empty-state-desc">Select a class and date.</div></div>
+            <div class="table-container" id="table-container">
+              <table id="attendance-table"><thead><tr><th>#</th><th>Roll No.</th><th>Student Name</th><th>Status</th><th>Confidence</th><th>Time</th><th>Verification</th></tr></thead><tbody id="attendance-table-body"></tbody></table>
+            </div>
+          </section>
 
+          <!-- Activity Feed -->
+          <section class="activity-section">
+            <div class="activity-section-header"><div><div class="table-section-title">Recent Activity</div><div class="table-section-meta">Live face recognition events</div></div></div>
+            <div id="activity-feed" class="activity-feed"></div>
+          </section>
         </section>
 
-        <!-- ── Recent Activity ── -->
-        <section class="activity-section" aria-label="Recent recognition activity">
-
-          <div class="activity-section-header">
+        <!-- ══════════ SECTION: Students ══════════ -->
+        <section id="section-students" class="dashboard-section" style="display:none">
+          <div class="section-header-bar">
             <div>
-              <div class="table-section-title">Recent Activity</div>
-              <div class="table-section-meta">Live face recognition events</div>
+              <h1 class="section-title">Student Directory</h1>
+              <p class="section-subtitle">All students enrolled in your courses</p>
+            </div>
+            <div class="section-actions">
+              <input type="text" id="student-search" class="filter-select" placeholder="Search by name or enrollment..." style="width:280px" />
             </div>
           </div>
-
-          <div id="activity-loading" style="display:none;">
-            <div class="loading-state">
-              <div class="skeleton skeleton-row"></div>
-              <div class="skeleton skeleton-row w-60"></div>
-              <div class="skeleton skeleton-row w-40"></div>
+          <div id="students-table-wrapper" class="table-section">
+            <div class="table-container">
+              <table id="students-table"><thead><tr><th>#</th><th>Enrollment</th><th>Student Name</th><th>Program</th><th>Sem</th><th>Attendance %</th><th>Status</th></tr></thead><tbody id="students-table-body"></tbody></table>
             </div>
           </div>
+        </section>
 
-          <div id="activity-feed" class="activity-feed" aria-live="polite" aria-label="Activity feed"></div>
+        <!-- ══════════ SECTION: Defaulters ══════════ -->
+        <section id="section-defaulters" class="dashboard-section" style="display:none">
+          <div class="section-header-bar">
+            <div>
+              <h1 class="section-title">Defaulter Report</h1>
+              <p class="section-subtitle">Students below the 75% attendance threshold</p>
+            </div>
+            <div class="section-meta"><span id="defaulter-count-badge" class="badge badge-absent">0 students</span></div>
+          </div>
+          <div id="defaulters-table-wrapper" class="table-section">
+            <div class="table-container">
+              <table id="defaulters-table"><thead><tr><th>#</th><th>Enrollment</th><th>Student Name</th><th>Course</th><th>Present</th><th>Total</th><th>Attendance %</th><th>Deficit</th></tr></thead><tbody id="defaulters-table-body"></tbody></table>
+            </div>
+          </div>
+        </section>
 
+        <!-- ══════════ SECTION: Appeals ══════════ -->
+        <section id="section-appeals" class="dashboard-section" style="display:none">
+          <div class="section-header-bar">
+            <div>
+              <h1 class="section-title">Appeals Management</h1>
+              <p class="section-subtitle">Review and process student attendance appeals</p>
+            </div>
+            <div class="section-actions">
+              <select id="appeal-status-filter" class="filter-select" style="width:160px">
+                <option value="">All Appeals</option>
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+          <div id="appeals-list" class="appeals-list">
+            <div class="loading-state"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row w-60"></div></div>
+          </div>
+        </section>
+
+        <!-- ══════════ SECTION: Reports ══════════ -->
+        <section id="section-reports" class="dashboard-section" style="display:none">
+          <div class="section-header-bar">
+            <div>
+              <h1 class="section-title">Reports & Export</h1>
+              <p class="section-subtitle">Generate and download attendance reports</p>
+            </div>
+          </div>
+          <div class="reports-grid">
+            <div class="card report-card">
+              <div class="report-card-icon" style="background:var(--color-primary-bg);color:var(--color-primary-accent)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+              <h3>Full Attendance Report</h3>
+              <p class="text-muted" style="font-size:12px;margin:8px 0">All courses, all students — complete CSV export</p>
+              <button class="btn btn-primary" id="export-all-btn">Download CSV</button>
+            </div>
+            <div class="card report-card">
+              <div class="report-card-icon" style="background:var(--color-success-bg);color:var(--color-success)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+              <h3>Per-Course Report</h3>
+              <p class="text-muted" style="font-size:12px;margin:8px 0">Select a specific course to export</p>
+              <select id="export-course-select" class="filter-select" style="margin-bottom:8px"></select>
+              <button class="btn btn-outline" id="export-course-btn">Download CSV</button>
+            </div>
+          </div>
         </section>
 
       </main>
@@ -382,84 +427,20 @@
 
   <!-- Notification Modal -->
   <div id="notif-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-labelledby="notif-modal-title">
+    <div class="modal-box" role="dialog">
       <div class="modal-header">
-        <div class="modal-title" id="notif-modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          Notifications
-        </div>
-        <button class="modal-close" id="notif-close-btn" aria-label="Close notifications">&times;</button>
+        <div class="modal-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notifications</div>
+        <button class="modal-close" id="notif-close-btn">&times;</button>
       </div>
       <div class="modal-body">
         <div class="notif-list" id="notif-list">
-          <div class="notif-item unread">
-            <div class="notif-icon alert">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            </div>
-            <div class="notif-content">
-              <div class="notif-item-title">Low Attendance Warning</div>
-              <div class="notif-desc">4 students in B.Tech CSE Semester 7 Section B are below 75% threshold.</div>
-              <div class="notif-time">10 minutes ago</div>
-            </div>
-          </div>
-          <div class="notif-item unread">
-            <div class="notif-icon success">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="notif-content">
-              <div class="notif-item-title">Recognition Session Completed</div>
-              <div class="notif-desc">Machine Learning class session completed with 84.2% attendance rate.</div>
-              <div class="notif-time">1 hour ago</div>
-            </div>
-          </div>
-          <div class="notif-item">
-            <div class="notif-icon info">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            </div>
-            <div class="notif-content">
-              <div class="notif-item-title">Weekly Attendance Summary</div>
-              <div class="notif-desc">System auto-generated weekly report for Machine Learning.</div>
-              <div class="notif-time">Yesterday</div>
-            </div>
-          </div>
+          <div class="notif-item unread"><div class="notif-icon alert"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div><div class="notif-content"><div class="notif-item-title">Low Attendance Warning</div><div class="notif-desc">Students below 75% threshold detected.</div><div class="notif-time">10 minutes ago</div></div></div>
+          <div class="notif-item unread"><div class="notif-icon success"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="notif-content"><div class="notif-item-title">Recognition Session Complete</div><div class="notif-desc">Machine Learning class session completed.</div><div class="notif-time">1 hour ago</div></div></div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" id="notif-read-all-btn">Mark all as read</button>
+        <button class="btn btn-outline" id="notif-read-all-btn">Mark all read</button>
         <button class="btn btn-primary" id="notif-done-btn">Done</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Edit Profile Modal -->
-  <div id="edit-profile-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-labelledby="edit-modal-title">
-      <div class="modal-header">
-        <div class="modal-title" id="edit-modal-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          Edit Profile Information
-        </div>
-        <button class="modal-close" id="edit-profile-close-btn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="edit-profile-form" style="display:flex;flex-direction:column;gap:14px;">
-          <div>
-            <label class="filter-label" for="edit-email" style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;">Email Address</label>
-            <input type="email" id="edit-email" class="filter-select" value="p.sharma@karnavati.edu" style="width:100%;" required />
-          </div>
-          <div>
-            <label class="filter-label" for="edit-phone" style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;">Mobile Number</label>
-            <input type="tel" id="edit-phone" class="filter-select" value="+91 98765 43210" style="width:100%;" required />
-          </div>
-          <div>
-            <label class="filter-label" for="edit-address" style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;">Department Office</label>
-            <input type="text" id="edit-address" class="filter-select" value="Block A, Room 304, Karnavati University" style="width:100%;" required />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" id="edit-profile-cancel">Cancel</button>
-        <button class="btn btn-primary" id="edit-profile-save">Save Changes</button>
       </div>
     </div>
   </div>
@@ -470,4 +451,3 @@
 
 </body>
 </html>
-

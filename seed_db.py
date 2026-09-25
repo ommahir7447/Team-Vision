@@ -12,6 +12,8 @@ from backend.models.user import User
 from backend.models.course import Course, Enrollment
 from backend.models.attendance import AttendanceRecord
 from backend.models.appeal import Appeal
+from backend.models.timetable import Timetable
+from backend.models.mentor import MentorAssignment
 
 app = create_app()
 
@@ -150,6 +152,112 @@ def seed_database():
         )
         db.session.add(sample_appeal)
 
+        # Additional appeals for testing
+        appeal2 = Appeal(
+            appeal_id='APP-00103',
+            record_id='REC-S703-C102-1',
+            student_id='S703',
+            course_id='C102',
+            reason='Family emergency. Was unable to attend class.',
+            status='Pending',
+            created_at=now - timedelta(hours=6)
+        )
+        appeal3 = Appeal(
+            appeal_id='APP-00104',
+            record_id='REC-S712-C101-1',
+            student_id='S712',
+            course_id='C101',
+            reason='University sports event participation. Certificate available.',
+            status='Approved',
+            reviewed_by='F001',
+            reviewed_at=now - timedelta(hours=2),
+            created_at=now - timedelta(days=3)
+        )
+        db.session.add_all([appeal2, appeal3])
+
+        # ── 6. Timetable ──
+        timetable_data = [
+            # Dr. Priya Sharma (F001) — Machine Learning
+            {'slot': 'TT-MON-0900-C101', 'fid': 'F001', 'cid': 'C101', 'day': 'Monday',    'start': '09:00', 'end': '10:00', 'room': 'Room 301', 'type': 'Lecture'},
+            {'slot': 'TT-WED-0900-C101', 'fid': 'F001', 'cid': 'C101', 'day': 'Wednesday',  'start': '09:00', 'end': '10:00', 'room': 'Room 301', 'type': 'Lecture'},
+            {'slot': 'TT-THU-1400-C101', 'fid': 'F001', 'cid': 'C101', 'day': 'Thursday',   'start': '14:00', 'end': '16:00', 'room': 'Lab 201',  'type': 'Lab'},
+            {'slot': 'TT-FRI-1100-C101', 'fid': 'F001', 'cid': 'C101', 'day': 'Friday',     'start': '11:00', 'end': '12:00', 'room': 'Room 301', 'type': 'Tutorial'},
+
+            # Prof. Amit Verma (F002) — Cloud Computing
+            {'slot': 'TT-MON-1100-C102', 'fid': 'F002', 'cid': 'C102', 'day': 'Monday',    'start': '11:00', 'end': '12:00', 'room': 'Room 302', 'type': 'Lecture'},
+            {'slot': 'TT-TUE-0900-C102', 'fid': 'F002', 'cid': 'C102', 'day': 'Tuesday',   'start': '09:00', 'end': '10:00', 'room': 'Room 302', 'type': 'Lecture'},
+            {'slot': 'TT-THU-0900-C102', 'fid': 'F002', 'cid': 'C102', 'day': 'Thursday',  'start': '09:00', 'end': '10:00', 'room': 'Room 302', 'type': 'Lecture'},
+            {'slot': 'TT-FRI-1400-C102', 'fid': 'F002', 'cid': 'C102', 'day': 'Friday',    'start': '14:00', 'end': '16:00', 'room': 'Lab 202',  'type': 'Lab'},
+
+            # Dr. Renu Patel (F003) — Cybersecurity
+            {'slot': 'TT-TUE-1100-C103', 'fid': 'F003', 'cid': 'C103', 'day': 'Tuesday',   'start': '11:00', 'end': '12:00', 'room': 'Room 303', 'type': 'Lecture'},
+            {'slot': 'TT-WED-1400-C103', 'fid': 'F003', 'cid': 'C103', 'day': 'Wednesday', 'start': '14:00', 'end': '15:00', 'room': 'Room 303', 'type': 'Lecture'},
+            {'slot': 'TT-FRI-0900-C103', 'fid': 'F003', 'cid': 'C103', 'day': 'Friday',    'start': '09:00', 'end': '10:00', 'room': 'Room 303', 'type': 'Lecture'},
+
+            # Prof. Suresh Iyer (F004) — DBMS
+            {'slot': 'TT-MON-1400-C104', 'fid': 'F004', 'cid': 'C104', 'day': 'Monday',    'start': '14:00', 'end': '15:00', 'room': 'Room 304', 'type': 'Lecture'},
+            {'slot': 'TT-WED-1100-C104', 'fid': 'F004', 'cid': 'C104', 'day': 'Wednesday', 'start': '11:00', 'end': '12:00', 'room': 'Room 304', 'type': 'Lecture'},
+            {'slot': 'TT-THU-1100-C104', 'fid': 'F004', 'cid': 'C104', 'day': 'Thursday',  'start': '11:00', 'end': '13:00', 'room': 'Lab 203',  'type': 'Lab'},
+
+            # Dr. Meena Joshi (F005) — Software Engineering
+            {'slot': 'TT-TUE-1400-C105', 'fid': 'F005', 'cid': 'C105', 'day': 'Tuesday',   'start': '14:00', 'end': '15:00', 'room': 'Room 305', 'type': 'Lecture'},
+            {'slot': 'TT-WED-1600-C105', 'fid': 'F005', 'cid': 'C105', 'day': 'Wednesday', 'start': '16:00', 'end': '17:00', 'room': 'Room 305', 'type': 'Lecture'},
+            {'slot': 'TT-SAT-0900-C105', 'fid': 'F005', 'cid': 'C105', 'day': 'Saturday',  'start': '09:00', 'end': '11:00', 'room': 'Lab 204',  'type': 'Lab'},
+        ]
+
+        for t in timetable_data:
+            slot = Timetable(
+                slot_id=t['slot'],
+                faculty_id=t['fid'],
+                course_id=t['cid'],
+                day_of_week=t['day'],
+                start_time=t['start'],
+                end_time=t['end'],
+                room=t['room'],
+                section='Section B',
+                slot_type=t['type'],
+            )
+            db.session.add(slot)
+
+        # ── 7. Mentor Assignments ──
+        # F001 (Dr. Priya Sharma) mentors 5 students
+        # F002 (Prof. Amit Verma) mentors 5 students
+        # F003 (Dr. Renu Patel) mentors 5 students
+        mentor_assignments = [
+            # Mentor F001 → students S701-S705
+            {'mid': 'F001', 'sid': 'S701'},
+            {'mid': 'F001', 'sid': 'S702'},
+            {'mid': 'F001', 'sid': 'S703'},
+            {'mid': 'F001', 'sid': 'S704'},
+            {'mid': 'F001', 'sid': 'S705'},
+
+            # Mentor F002 → students S706-S710
+            {'mid': 'F002', 'sid': 'S706'},
+            {'mid': 'F002', 'sid': 'S707'},
+            {'mid': 'F002', 'sid': 'S708'},
+            {'mid': 'F002', 'sid': 'S709'},
+            {'mid': 'F002', 'sid': 'S710'},
+
+            # Mentor F003 → students S711-S714 + S045
+            {'mid': 'F003', 'sid': 'S711'},
+            {'mid': 'F003', 'sid': 'S712'},
+            {'mid': 'F003', 'sid': 'S713'},
+            {'mid': 'F003', 'sid': 'S714'},
+            {'mid': 'F003', 'sid': 'S045'},
+        ]
+
+        for ma in mentor_assignments:
+            assignment = MentorAssignment(
+                assignment_id=f"MA-{ma['mid']}-{ma['sid']}",
+                mentor_id=ma['mid'],
+                student_id=ma['sid'],
+                semester='Semester 7',
+                academic_year='2025-2026',
+                assigned_at=now - timedelta(days=60),
+                notes=None,
+            )
+            db.session.add(assignment)
+
         db.session.commit()
 
         # Print summary
@@ -157,8 +265,11 @@ def seed_database():
         course_count = Course.query.count()
         record_count = AttendanceRecord.query.count()
         appeal_count = Appeal.query.count()
+        timetable_count = Timetable.query.count()
+        mentor_count = MentorAssignment.query.count()
         print(f"[SUCCESS] Database seeded!")
-        print(f"  Users: {user_count}  |  Courses: {course_count}  |  Attendance Records: {record_count}  |  Appeals: {appeal_count}")
+        print(f"  Users: {user_count}  |  Courses: {course_count}  |  Attendance Records: {record_count}")
+        print(f"  Appeals: {appeal_count}  |  Timetable Slots: {timetable_count}  |  Mentor Assignments: {mentor_count}")
 
 
 if __name__ == '__main__':

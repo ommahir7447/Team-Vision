@@ -18,6 +18,7 @@ from backend.routes.auth import auth_bp
 from backend.routes.attendance import attendance_bp
 from backend.routes.students import students_bp
 from backend.routes.faculty import faculty_bp
+from backend.routes.mentor import mentor_bp
 
 
 def create_app(config_class=Config):
@@ -34,6 +35,7 @@ def create_app(config_class=Config):
     app.register_blueprint(attendance_bp)
     app.register_blueprint(students_bp)
     app.register_blueprint(faculty_bp)
+    app.register_blueprint(mentor_bp)
 
     # ── Serve frontend HTML pages ──
     @app.route('/')
@@ -47,6 +49,10 @@ def create_app(config_class=Config):
     @app.route('/student')
     def student_page():
         return send_from_directory('../frontend', 'student.html')
+
+    @app.route('/mentor')
+    def mentor_page():
+        return send_from_directory('../frontend', 'mentor.html')
 
     @app.route('/uploads/<path:filename>')
     def serve_uploads(filename):
