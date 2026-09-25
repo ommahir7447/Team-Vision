@@ -1,0 +1,92 @@
+/* Faculty Dashboard Styles */
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+.schedule-time {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary-accent);
+  white-space: nowrap;
+  background: var(--color-primary-bg);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-primary-border);
+}
+.timetable-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.timetable-day-header {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  padding: 8px;
+  text-align: center;
+  background: var(--color-surface-2);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.timetable-day-header.today {
+  color: var(--color-primary-accent);
+  background: var(--color-primary-bg);
+}
+.timetable-empty {
+  padding: 20px 8px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-text-disabled);
+}
+.timetable-slot {
+  padding: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+}
+.timetable-slot-time {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-primary-accent);
+  margin-bottom: 4px;
+}
+.timetable-slot-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+.timetable-slot-meta {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+.subject-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+.subject-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.appeal-card {
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}

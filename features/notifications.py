@@ -17,7 +17,7 @@ def send_absence_notification(student_email: str, student_name: str, course_name
         f"Dear {student_name},\n\n"
         f"You were recorded ABSENT for {course_name} on {time_str}.\n"
         f"If this is an error, you may submit a formal attendance appeal via your SmartAttend Student Portal within 48 hours.\n\n"
-        f"Regards,\nSmartAttend Monitoring System\nKarnavati University (UIT CSE)"
+        f"Regards,\nSmartAttend Monitoring System"
     )
 
     # Logging mock dispatch
@@ -41,7 +41,7 @@ def send_defaulter_warning(student_email: str, student_name: str, course_name: s
         f"Dear {student_name},\n\n"
         f"Your attendance in {course_name} is currently {current_pct}%, which is below the mandatory 75% threshold.\n"
         f"Please attend upcoming lectures to avoid academic disqualification.\n\n"
-        f"Regards,\nDepartment of CSE - Karnavati University"
+        f"Regards,\nDepartment of CSE"
     )
 
     print(f"[WARNING] Defaulter Warning Sent to [{student_email}]: {subject}")

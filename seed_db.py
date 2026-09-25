@@ -26,11 +26,11 @@ def seed_database():
 
         # ── 1. Faculty Users ──
         faculty_data = [
-            {'id': 'F001', 'name': 'Dr. Priya Sharma',  'email': 'p.sharma@karnavati.edu'},
-            {'id': 'F002', 'name': 'Prof. Amit Verma',   'email': 'a.verma@karnavati.edu'},
-            {'id': 'F003', 'name': 'Dr. Renu Patel',     'email': 'r.patel@karnavati.edu'},
-            {'id': 'F004', 'name': 'Prof. Suresh Iyer',  'email': 's.iyer@karnavati.edu'},
-            {'id': 'F005', 'name': 'Dr. Meena Joshi',    'email': 'm.joshi@karnavati.edu'},
+            {'id': 'F001', 'name': 'Dr. Priya Sharma',  'email': 'p.sharma@smartattend.edu'},
+            {'id': 'F002', 'name': 'Prof. Amit Verma',   'email': 'a.verma@smartattend.edu'},
+            {'id': 'F003', 'name': 'Dr. Renu Patel',     'email': 'r.patel@smartattend.edu'},
+            {'id': 'F004', 'name': 'Prof. Suresh Iyer',  'email': 's.iyer@smartattend.edu'},
+            {'id': 'F005', 'name': 'Dr. Meena Joshi',    'email': 'm.joshi@smartattend.edu'},
         ]
         for f in faculty_data:
             u = User(
@@ -42,21 +42,21 @@ def seed_database():
 
         # ── 2. Student Users ──
         students_data = [
-            {'id': 'S045', 'name': 'Nidhi Tak',       'enrollment': '22BCS045', 'email': 'nidhi.tak@karnavati.edu',    'sem': 6, 'sec': 'C'},
-            {'id': 'S701', 'name': 'Aarav Mehta',      'enrollment': '22BCS701', 'email': 'aarav.m@karnavati.edu',      'sem': 7, 'sec': 'B'},
-            {'id': 'S702', 'name': 'Bhavya Shah',      'enrollment': '22BCS702', 'email': 'bhavya.s@karnavati.edu',     'sem': 7, 'sec': 'B'},
-            {'id': 'S703', 'name': 'Chirag Patel',     'enrollment': '22BCS703', 'email': 'chirag.p@karnavati.edu',     'sem': 7, 'sec': 'B'},
-            {'id': 'S704', 'name': 'Diya Joshi',       'enrollment': '22BCS704', 'email': 'diya.j@karnavati.edu',       'sem': 7, 'sec': 'B'},
-            {'id': 'S705', 'name': 'Esha Trivedi',     'enrollment': '22BCS705', 'email': 'esha.t@karnavati.edu',       'sem': 7, 'sec': 'B'},
-            {'id': 'S706', 'name': 'Farhan Khan',      'enrollment': '22BCS706', 'email': 'farhan.k@karnavati.edu',     'sem': 7, 'sec': 'B'},
-            {'id': 'S707', 'name': 'Gauri Desai',      'enrollment': '22BCS707', 'email': 'gauri.d@karnavati.edu',      'sem': 7, 'sec': 'B'},
-            {'id': 'S708', 'name': 'Harsh Gupta',      'enrollment': '22BCS708', 'email': 'harsh.g@karnavati.edu',      'sem': 7, 'sec': 'B'},
-            {'id': 'S709', 'name': 'Isha Nair',        'enrollment': '22BCS709', 'email': 'isha.n@karnavati.edu',       'sem': 7, 'sec': 'B'},
-            {'id': 'S710', 'name': 'Jay Verma',        'enrollment': '22BCS710', 'email': 'jay.v@karnavati.edu',        'sem': 7, 'sec': 'B'},
-            {'id': 'S711', 'name': 'Kriti Agrawal',    'enrollment': '22BCS711', 'email': 'kriti.a@karnavati.edu',      'sem': 7, 'sec': 'B'},
-            {'id': 'S712', 'name': 'Laksh Solanki',    'enrollment': '22BCS712', 'email': 'laksh.s@karnavati.edu',      'sem': 7, 'sec': 'B'},
-            {'id': 'S713', 'name': 'Mira Jain',        'enrollment': '22BCS713', 'email': 'mira.j@karnavati.edu',       'sem': 7, 'sec': 'B'},
-            {'id': 'S714', 'name': 'Nikhil Rao',       'enrollment': '22BCS714', 'email': 'nikhil.r@karnavati.edu',     'sem': 7, 'sec': 'B'},
+            {'id': 'S045', 'name': 'Nidhi Tak',       'enrollment': '22BCS045', 'email': 'nidhi.tak@smartattend.edu',    'sem': 6, 'sec': 'C'},
+            {'id': 'S701', 'name': 'Aarav Mehta',      'enrollment': '22BCS701', 'email': 'aarav.m@smartattend.edu',      'sem': 7, 'sec': 'B'},
+            {'id': 'S702', 'name': 'Bhavya Shah',      'enrollment': '22BCS702', 'email': 'bhavya.s@smartattend.edu',     'sem': 7, 'sec': 'B'},
+            {'id': 'S703', 'name': 'Chirag Patel',     'enrollment': '22BCS703', 'email': 'chirag.p@smartattend.edu',     'sem': 7, 'sec': 'B'},
+            {'id': 'S704', 'name': 'Diya Joshi',       'enrollment': '22BCS704', 'email': 'diya.j@smartattend.edu',       'sem': 7, 'sec': 'B'},
+            {'id': 'S705', 'name': 'Esha Trivedi',     'enrollment': '22BCS705', 'email': 'esha.t@smartattend.edu',       'sem': 7, 'sec': 'B'},
+            {'id': 'S706', 'name': 'Farhan Khan',      'enrollment': '22BCS706', 'email': 'farhan.k@smartattend.edu',     'sem': 7, 'sec': 'B'},
+            {'id': 'S707', 'name': 'Gauri Desai',      'enrollment': '22BCS707', 'email': 'gauri.d@smartattend.edu',      'sem': 7, 'sec': 'B'},
+            {'id': 'S708', 'name': 'Harsh Gupta',      'enrollment': '22BCS708', 'email': 'harsh.g@smartattend.edu',      'sem': 7, 'sec': 'B'},
+            {'id': 'S709', 'name': 'Isha Nair',        'enrollment': '22BCS709', 'email': 'isha.n@smartattend.edu',       'sem': 7, 'sec': 'B'},
+            {'id': 'S710', 'name': 'Jay Verma',        'enrollment': '22BCS710', 'email': 'jay.v@smartattend.edu',        'sem': 7, 'sec': 'B'},
+            {'id': 'S711', 'name': 'Kriti Agrawal',    'enrollment': '22BCS711', 'email': 'kriti.a@smartattend.edu',      'sem': 7, 'sec': 'B'},
+            {'id': 'S712', 'name': 'Laksh Solanki',    'enrollment': '22BCS712', 'email': 'laksh.s@smartattend.edu',      'sem': 7, 'sec': 'B'},
+            {'id': 'S713', 'name': 'Mira Jain',        'enrollment': '22BCS713', 'email': 'mira.j@smartattend.edu',       'sem': 7, 'sec': 'B'},
+            {'id': 'S714', 'name': 'Nikhil Rao',       'enrollment': '22BCS714', 'email': 'nikhil.r@smartattend.edu',     'sem': 7, 'sec': 'B'},
         ]
 
         student_objs = []

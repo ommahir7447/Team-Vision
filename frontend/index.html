@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartAttend — University Attendance & Academic Management System</title>
   <meta name="description"
-    content="SmartAttend is an AI-powered face recognition attendance system for Karnavati University. Access the Faculty Dashboard or Student Portal." />
+    content="SmartAttend is an AI-powered face recognition attendance system. Access the Faculty Dashboard or Student Portal." />
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -882,7 +882,7 @@
         </div>
         <div class="nav-brand-text">
           <div class="nav-brand-name">SmartAttend</div>
-          <div class="nav-brand-sub">Karnavati University</div>
+          <div class="nav-brand-sub">Smart Attendance</div>
         </div>
       </a>
       <div class="nav-actions">
@@ -982,7 +982,7 @@
 
   <!-- ── Footer ── -->
   <footer class="footer">
-    <p>SmartAttend &middot; Karnavati University</p>
+    <p>SmartAttend &middot; Attendance System</p>
   </footer>
 
   <!-- ============================================================
@@ -1092,7 +1092,7 @@
     style="position:absolute; left:-9999px; opacity:0;"></div>
 
   <script>
-    const ALLOWED_DOMAINS = ['karnavatiuniversity.edu.in', 'karnavati.edu'];
+    const ALLOWED_DOMAINS = ['smartattend.edu', 'university.edu'];
     let currentRole = 'student';
 
     /* ── Modal Controls ── */
@@ -1214,7 +1214,7 @@
       if (identifier.includes('@')) {
         const domain = identifier.split('@')[1] || '';
         if (!ALLOWED_DOMAINS.includes(domain)) {
-          showError('Unauthorized Access — Only @karnavatiuniversity.edu.in accounts are allowed.');
+          showError('Unauthorized Access — Invalid account domain.');
           return;
         }
       }
@@ -1241,7 +1241,7 @@
           user_id: isFaculty ? 'F001' : 'S045',
           name: identifier || (isFaculty ? 'Dr. Priya Sharma' : 'Om Ahir'),
           role: isFaculty ? 'faculty' : 'student',
-          email: identifier.includes('@') ? identifier : (isFaculty ? 'p.sharma@karnavati.edu' : 'om.mahir@karnavati.edu'),
+          email: identifier.includes('@') ? identifier : (isFaculty ? 'p.sharma@smartattend.edu' : 'om.mahir@smartattend.edu'),
           department: 'Computer Science & Engineering',
           program: 'B.Tech CSE',
           semester: 7,
@@ -1306,7 +1306,7 @@
           localStorage.setItem('smartattend_user', JSON.stringify(data.user));
           window.location.href = data.user.role === 'faculty' ? 'faculty.html' : 'student.html';
         } else if (res.status === 403) {
-          showError(data.message || 'Unauthorized Access — Only @karnavatiuniversity.edu.in accounts are permitted.');
+          showError(data.message || 'Unauthorized Access — Invalid account domain.');
         } else {
           showError(data.message || data.error || 'Login failed.');
         }
@@ -1317,7 +1317,7 @@
           const decoded = JSON.parse(atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/')));
           const email = decoded.email || '';
           if (!ALLOWED_DOMAINS.some(dom => email.endsWith('@' + dom))) {
-            showError(`Access restricted — Only @karnavatiuniversity.edu.in accounts are permitted. (Signed in as ${email})`);
+            showError(`Access restricted — Invalid account domain. (Signed in as ${email})`);
             return;
           }
           const enrollment_no = email.split('@')[0];

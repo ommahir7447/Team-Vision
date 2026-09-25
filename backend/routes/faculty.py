@@ -54,7 +54,7 @@ def get_faculty_profile():
         'faculty_id': faculty.user_id if faculty else 'F001',
         'name': name,
         'department': faculty.department if faculty else 'Computer Science & Engineering',
-        'email': faculty.email if faculty else 'p.sharma@karnavati.edu',
+        'email': faculty.email if faculty else 'p.sharma@smartattend.edu',
         'initials': initials,
         'total_courses': len(courses),
         'total_students': student_count,
