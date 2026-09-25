@@ -1,6 +1,6 @@
 """
 seed_db.py — SmartAttend Database Seeder (Backend Module Only)
-Populates local SQLite database (smartattend.db) with realistic initial seed data
+Populates the database (MySQL or SQLite) with realistic initial seed data
 matching the team capstone specifications and frontend mock registry.
 Only uses backend/ models — no dependency on recognition/ or features/.
 """
@@ -72,6 +72,8 @@ def seed_database():
             student_objs.append(u)
             db.session.add(u)
 
+        db.session.commit()
+
         # ── 3. Courses ──
         courses_data = [
             {'id': 'C101', 'code': 'CS601', 'name': 'Machine Learning',            'fid': 'F001', 'fname': 'Dr. Priya Sharma',  'total': 42},
@@ -139,6 +141,7 @@ def seed_database():
                     records_to_add.append(rec)
 
         db.session.add_all(records_to_add)
+        db.session.commit()
 
         # ── 5. Sample Appeal ──
         sample_appeal = Appeal(

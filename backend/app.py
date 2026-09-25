@@ -82,18 +82,16 @@ def create_app(config_class=Config):
     # Auto-create database tables on startup
     with app.app_context():
         db.create_all()
-        # Migrate: add profile_picture column if missing (for existing SQLite DBs)
+        # Migrate: add profile_picture column if missing (works for MySQL and SQLite)
         try:
-            import sqlite3
-            db_path = Path(app.root_path).parent / 'smartattend.db'
-            if db_path.exists():
-                conn = sqlite3.connect(str(db_path))
-                cols = [row[1] for row in conn.execute('PRAGMA table_info(users)').fetchall()]
-                if 'profile_picture' not in cols:
-                    conn.execute('ALTER TABLE users ADD COLUMN profile_picture TEXT')
-                    conn.commit()
+            from sqlalchemy import inspect as sa_inspect, text
+            inspector = sa_inspect(db.engine)
+            if inspector.has_table('users'):
+                columns = [col['name'] for col in inspector.get_columns('users')]
+                if 'profile_picture' not in columns:
+                    db.session.execute(text('ALTER TABLE users ADD COLUMN profile_picture TEXT'))
+                    db.session.commit()
                     print('[INFO] Migrated users table: added profile_picture column.')
-                conn.close()
         except Exception as migrate_err:
             print(f'[WARN] DB migration check failed: {migrate_err}')
 
