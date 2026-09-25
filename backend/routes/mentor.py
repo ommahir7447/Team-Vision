@@ -49,7 +49,7 @@ def get_mentor_profile():
         'mentor_id': mentor.user_id if mentor else 'F001',
         'name': name,
         'department': mentor.department if mentor else 'Computer Science & Engineering',
-        'email': mentor.email if mentor else 'p.sharma@karnavati.edu',
+        'email': mentor.email if mentor else 'p.sharma@smartattend.edu',
         'initials': initials,
         'total_mentees': mentee_count,
         'profile_picture': mentor.profile_picture if mentor else None,

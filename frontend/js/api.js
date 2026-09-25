@@ -75,22 +75,22 @@ const MOCK_FACULTY = {
   faculty_id: 'F001',
   name: 'Dr. Priya Sharma',
   department: 'Computer Science & Engineering',
-  email: 'p.sharma@karnavati.edu',
+  email: 'p.sharma@smartattend.edu',
   initials: 'PS',
 };
 
 const MOCK_STUDENT = {
   student_id: 'S045', name: 'Nidhi Tak', enrollment_no: '22BCS045',
-  email: 'nidhi.tak@karnavati.edu', program: 'B.Tech Computer Science & Engineering',
+  email: 'nidhi.tak@smartattend.edu', program: 'B.Tech Computer Science & Engineering',
   semester: 6, section: 'C', initials: 'NT',
 };
 
 const MOCK_STUDENT_PROFILE_FULL = {
   name: 'NIDHI TAK', enrollment_no: '22BCS045', student_id: 'S045',
   program: 'B.Tech Computer Science & Engineering', branch: 'CSE', semester: 6, section: 'C', initials: 'NT',
-  institute_code: 'KU-UIT-001', name_10th: 'NIDHI TAK', dob: '15/08/2004', mobile: '+91 98765 43210',
-  email: 'nidhi.tak@karnavati.edu', category: 'General', religion: 'Hindu', batch: '2022–2026',
-  application_no: 'KU2022BCS0451', academic_year: '2025–2026', admitted_year: '2022', gender: 'Female',
+  institute_code: 'UIT-001', name_10th: 'NIDHI TAK', dob: '15/08/2004', mobile: '+91 98765 43210',
+  email: 'nidhi.tak@smartattend.edu', category: 'General', religion: 'Hindu', batch: '2022–2026',
+  application_no: 'APP2022BCS0451', academic_year: '2025–2026', admitted_year: '2022', gender: 'Female',
   doj: '01/08/2022', blood_group: 'B+', nationality: 'Indian', marital_status: 'Single', aadhar: 'XXXX XXXX 1234'
 };
 

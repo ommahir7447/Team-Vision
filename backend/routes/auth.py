@@ -166,7 +166,7 @@ def google_auth():
     Verifies the Google ID token, enforces university domain,
     auto-registers new users with enrollment number from email prefix.
     """
-    ALLOWED_DOMAIN = 'karnavatiuniversity.edu.in'
+    ALLOWED_DOMAIN = os.getenv('ALLOWED_EMAIL_DOMAIN', 'smartattend.edu')
 
     data = request.get_json() or {}
     token = data.get('credential')
