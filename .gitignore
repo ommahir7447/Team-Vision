@@ -27,3 +27,4 @@ dist/
 /recognition/dataset/
 /recognition/embeddings.pkl
 /recognition/venv/
+/recognition/lfw_faces/
