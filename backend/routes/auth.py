@@ -3,6 +3,7 @@ auth.py — Authentication REST API Handlers (SmartAttend Module 2)
 Provides login, identity inspection, and token validation with JWT.
 """
 
+import os
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from google.oauth2 import id_token
@@ -44,6 +45,10 @@ def login():
                 user = u
                 break
 
+    # Guard: user must exist before checking password
+    if not user:
+        return jsonify({'error': 'Invalid credentials. Please check your Enrollment Number/Email and password.'}), 401
+
     # Verify password (also allow default 'student123' or 'faculty123' for initial/google-linked accounts)
     is_valid_pw = (
         user.check_password(password) or
@@ -51,7 +56,7 @@ def login():
         (password == 'faculty123' and user.role == 'faculty')
     )
 
-    if not user or not is_valid_pw:
+    if not is_valid_pw:
         return jsonify({'error': 'Invalid credentials. Please check your Enrollment Number/Email and password.'}), 401
 
     access_token = create_access_token(identity=user.user_id, additional_claims={'role': user.role})
@@ -166,7 +171,7 @@ def google_auth():
     Verifies the Google ID token, enforces university domain,
     auto-registers new users with enrollment number from email prefix.
     """
-    ALLOWED_DOMAIN = os.getenv('ALLOWED_EMAIL_DOMAIN', 'smartattend.edu')
+    ALLOWED_DOMAIN = os.getenv('ALLOWED_EMAIL_DOMAIN', 'karnavatiuniversity.edu.in')
 
     data = request.get_json() or {}
     token = data.get('credential')

@@ -1,0 +1,1757 @@
+{
+  "info": {
+    "name": "SmartAttend - Full API Collection",
+    "description": "Complete API test collection for SmartAttend (Module 2).\n\nBase URL: http://localhost:5000\n\nHOW TO USE:\n1. Import this file into Postman\n2. Start Flask: python -m backend.app\n3. Run 'Auth > Login - Student (Valid)' FIRST - saves JWT automatically\n4. All other requests use that token from collection variables\n\nFOLDERS:\n  Auth (8 requests)\n  Attendance (8 requests)\n  Student Portal (6 requests)\n  Faculty Dashboard (12 requests)\n  Mentor Dashboard (9 requests)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "student_id",
+      "value": "S-202307020009",
+      "type": "string"
+    },
+    {
+      "key": "faculty_id",
+      "value": "F001",
+      "type": "string"
+    },
+    {
+      "key": "mentor_id",
+      "value": "F001",
+      "type": "string"
+    },
+    {
+      "key": "course_id",
+      "value": "C101",
+      "type": "string"
+    },
+    {
+      "key": "record_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appeal_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('System healthy', function(){ var j=pm.response.json(); pm.expect(j.status).to.eql('healthy'); pm.expect(j.system).to.eql('SmartAttend API'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Student (Valid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"202307020009\",\n  \"password\": \"student123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has access_token', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('access_token'); pm.expect(j.user.role).to.eql('student'); pm.collectionVariables.set('jwt_token', j.access_token); pm.collectionVariables.set('student_id', j.user.user_id); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Wrong Password (Expect 401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"202307020009\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', function(){ pm.response.to.have.status(401); });",
+                  "pm.test('Has error', function(){ pm.expect(pm.response.json()).to.have.property('error'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Empty Fields (Expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"\",\n  \"password\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function(){ pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Faculty (Valid)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"F001\",\n  \"password\": \"faculty123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Faculty role', function(){ var j=pm.response.json(); pm.expect(j.user.role).to.eql('faculty'); pm.collectionVariables.set('jwt_token', j.access_token); pm.collectionVariables.set('faculty_id', j.user.user_id); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get /me - JWT Protected",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ],
+              "query": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('User fields', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('user_id'); pm.expect(j).to.have.property('name'); pm.expect(j).to.have.property('role'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get /me - No Token (Expect 401)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', function(){ pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"202307020009\",\n  \"current_password\": \"student123\",\n  \"new_password\": \"newpass456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/change-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "change-password"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 or 400 or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,400,404]); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Attendance",
+      "item": [
+        {
+          "name": "Log - Auto Present (conf=0.92, liveness=true)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"course_id\": \"{{course_id}}\",\n  \"confidence\": 0.92,\n  \"liveness_passed\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/log",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "log"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function(){ pm.response.to.have.status(201); });",
+                  "pm.test('Present + Auto', function(){ var r=pm.response.json().record; pm.expect(r.status).to.eql('Present'); pm.expect(r.verification_type).to.eql('Auto'); pm.collectionVariables.set('record_id', r.record_id); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Log - Flagged (conf=0.70, liveness=true)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"course_id\": \"{{course_id}}\",\n  \"confidence\": 0.7,\n  \"liveness_passed\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/log",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "log"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function(){ pm.response.to.have.status(201); });",
+                  "pm.test('Flagged + Manual', function(){ var r=pm.response.json().record; pm.expect(r.status).to.eql('Flagged'); pm.expect(r.verification_type).to.eql('Manual'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Log - Rejected Low Confidence (conf=0.30)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"course_id\": \"{{course_id}}\",\n  \"confidence\": 0.3,\n  \"liveness_passed\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/log",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "log"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function(){ pm.response.to.have.status(400); });",
+                  "pm.test('Rejected', function(){ pm.expect(pm.response.json().status).to.eql('Rejected'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Log - Rejected Liveness Fail (conf=0.98, liveness=false)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"course_id\": \"{{course_id}}\",\n  \"confidence\": 0.98,\n  \"liveness_passed\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/log",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "log"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 422', function(){ pm.response.to.have.status(422); });",
+                  "pm.test('Rejected + Liveness msg', function(){ var j=pm.response.json(); pm.expect(j.status).to.eql('Rejected'); pm.expect(j.reason).to.include('Liveness'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Log - Missing Fields (Expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"confidence\": 0.9\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/log",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "log"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', function(){ pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Class Attendance (Faculty View)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/attendance/class?subject=Machine Learning&program=B.Tech CSE&semester=Semester 7&section=Section B",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "class"
+              ],
+              "query": [
+                {
+                  "key": "subject",
+                  "value": "Machine Learning"
+                },
+                {
+                  "key": "program",
+                  "value": "B.Tech CSE"
+                },
+                {
+                  "key": "semester",
+                  "value": "Semester 7"
+                },
+                {
+                  "key": "section",
+                  "value": "Section B"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has stats, students, trend', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('stats'); pm.expect(j).to.have.property('students'); pm.expect(j).to.have.property('trend'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Manual Verify - Approve Flagged Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"record_id\": \"{{record_id}}\",\n  \"action\": \"Approve\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "verify"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,404]); });",
+                  "if(pm.response.code===200){ pm.test('Status Present', function(){ pm.expect(pm.response.json().record.status).to.eql('Present'); }); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Manual Verify - Reject Flagged Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"record_id\": \"{{record_id}}\",\n  \"action\": \"Reject\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/attendance/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "attendance",
+                "verify"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,404]); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Student Portal",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/student/profile?student_id={{student_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "student",
+                "profile"
+              ],
+              "query": [
+                {
+                  "key": "student_id",
+                  "value": "{{student_id}}"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Profile fields', function(){ var j=pm.response.json(); ['name','enrollment_no','program','semester'].forEach(function(f){ pm.expect(j).to.have.property(f); }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Full Profile (ID Card Data)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/student/profile/full?student_id={{student_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "student",
+                "profile",
+                "full"
+              ],
+              "query": [
+                {
+                  "key": "student_id",
+                  "value": "{{student_id}}"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has institute fields', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('institute_name'); pm.expect(j).to.have.property('batch'); pm.expect(j).to.have.property('blood_group'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Attendance Summary",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/student/summary?student_id={{student_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "student",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "student_id",
+                  "value": "{{student_id}}"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Summary fields valid', function(){ var j=pm.response.json(); ['overall_pct','total_classes','present','absent'].forEach(function(f){ pm.expect(j).to.have.property(f); }); pm.expect(j.overall_pct).to.be.within(0,100); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Subject-wise Attendance",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/student/subjects?student_id={{student_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "student",
+                "subjects"
+              ],
+              "query": [
+                {
+                  "key": "student_id",
+                  "value": "{{student_id}}"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Array of subjects', function(){ var j=pm.response.json(); pm.expect(j).to.be.an('array'); if(j.length>0){ pm.expect(j[0]).to.have.property('name'); pm.expect(j[0]).to.have.property('pct'); pm.expect(j[0]).to.have.property('status'); } });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Attendance History (limit=20)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/student/history?student_id={{student_id}}&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "student",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "student_id",
+                  "value": "{{student_id}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Returns array', function(){ pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Attendance Trend (8-Week)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/student/trend?student_id={{student_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "student",
+                "trend"
+              ],
+              "query": [
+                {
+                  "key": "student_id",
+                  "value": "{{student_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('8-week labels + data', function(){ var j=pm.response.json(); pm.expect(j.labels).to.have.lengthOf(8); pm.expect(j.data).to.have.lengthOf(8); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Faculty Dashboard",
+      "item": [
+        {
+          "name": "Get Faculty Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/profile?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "profile"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Faculty fields', function(){ var j=pm.response.json(); ['name','department','total_courses','total_students'].forEach(function(f){ pm.expect(j).to.have.property(f); }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Faculty Classes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/classes?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "classes"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Returns array', function(){ pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Faculty Timetable",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/timetable?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "timetable"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has slots + by_day', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('slots'); pm.expect(j).to.have.property('by_day'); pm.expect(j).to.have.property('total_classes_per_week'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Faculty Subjects (with Analytics)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/subjects?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "subjects"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Returns array', function(){ pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Faculty Students",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/students?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "students"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has total + students array', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('total'); pm.expect(j.students).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Faculty Students - With Search",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/students?faculty_id={{faculty_id}}&search=Om",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "students"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                },
+                {
+                  "key": "search",
+                  "value": "Om"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Individual Student Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/student/{{student_id}}?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "student",
+                "{{student_id}}"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,404]); });",
+                  "if(pm.response.code===200){ pm.test('Has student + subjects', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('student'); pm.expect(j).to.have.property('subjects'); }); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Defaulters (threshold=75%)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/defaulters?faculty_id={{faculty_id}}&threshold=75",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "defaulters"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                },
+                {
+                  "key": "threshold",
+                  "value": "75"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Correct structure', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('threshold'); pm.expect(j).to.have.property('count'); pm.expect(j).to.have.property('defaulters'); pm.expect(j.threshold).to.eql(75); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Defaulters - Custom Threshold (60%)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/defaulters?faculty_id={{faculty_id}}&threshold=60",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "defaulters"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                },
+                {
+                  "key": "threshold",
+                  "value": "60"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Threshold is 60', function(){ pm.expect(pm.response.json().threshold).to.eql(60); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Appeals",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/appeals?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "appeals"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Appeals structure', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('total'); pm.expect(j).to.have.property('appeals'); if(j.appeals.length>0){ pm.collectionVariables.set('appeal_id', j.appeals[0].appeal_id); } });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Review Appeal - Approve",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Approved\",\n  \"remarks\": \"Valid medical certificate provided.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/faculty/appeals/{{appeal_id}}/review?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "appeals",
+                "{{appeal_id}}",
+                "review"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Analytics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/analytics?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "analytics"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('All key metrics', function(){ var j=pm.response.json(); ['avg_attendance_rate','total_enrolled','defaulters_count','weekly_trend'].forEach(function(f){ pm.expect(j).to.have.property(f); }); pm.expect(j.weekly_trend.labels).to.have.lengthOf(8); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Export Attendance Report (CSV)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/faculty/reports/export?faculty_id={{faculty_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "faculty",
+                "reports",
+                "export"
+              ],
+              "query": [
+                {
+                  "key": "faculty_id",
+                  "value": "{{faculty_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Content-Type is CSV', function(){ pm.expect(pm.response.headers.get('Content-Type')).to.include('text/csv'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mentor Dashboard",
+      "item": [
+        {
+          "name": "Get Mentor Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/profile?mentor_id={{mentor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "profile"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has name + total_mentees', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('name'); pm.expect(j).to.have.property('total_mentees'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentees List",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentees?mentor_id={{mentor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "mentees"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Has total + mentees', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('total'); pm.expect(j).to.have.property('mentees'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentees - With Search",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentees?mentor_id={{mentor_id}}&search=Om",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "mentees"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                },
+                {
+                  "key": "search",
+                  "value": "Om"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentee Detail (Scope Enforced)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentee/{{student_id}}?mentor_id={{mentor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "mentee",
+                "{{student_id}}"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200, 403, or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,403,404]); });",
+                  "if(pm.response.code===403){ pm.test('Access denied message', function(){ pm.expect(pm.response.json().error).to.include('Access denied'); }); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentee Attendance Breakdown",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentee/{{student_id}}/attendance?mentor_id={{mentor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "mentee",
+                "{{student_id}}",
+                "attendance"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200, 403, or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,403,404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentee History (limit=30)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentee/{{student_id}}/history?mentor_id={{mentor_id}}&limit=30",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "mentee",
+                "{{student_id}}",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200, 403, or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,403,404]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentor Analytics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/analytics?mentor_id={{mentor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "analytics"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Analytics fields', function(){ var j=pm.response.json(); ['total_mentees','avg_attendance','at_risk_count','satisfactory_count'].forEach(function(f){ pm.expect(j).to.have.property(f); }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get At-Risk Alerts (threshold=75%)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/mentor/alerts?mentor_id={{mentor_id}}&threshold=75",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                },
+                {
+                  "key": "threshold",
+                  "value": "75"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function(){ pm.response.to.have.status(200); });",
+                  "pm.test('Alerts structure', function(){ var j=pm.response.json(); pm.expect(j).to.have.property('threshold'); pm.expect(j).to.have.property('total_alerts'); pm.expect(j).to.have.property('alerts'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Mentee Notes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Counseling session scheduled. Attendance improving.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentee/{{student_id}}/notes?mentor_id={{mentor_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mentor",
+                "mentee",
+                "{{student_id}}",
+                "notes"
+              ],
+              "query": [
+                {
+                  "key": "mentor_id",
+                  "value": "{{mentor_id}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200, 403, or 404', function(){ pm.expect(pm.response.code).to.be.oneOf([200,403,404]); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
